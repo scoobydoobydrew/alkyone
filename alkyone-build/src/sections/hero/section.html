@@ -60,6 +60,8 @@
               <path class="hc-wave" d="M452 196a14 14 0 0 1 0 24M464 187a26 26 0 0 1 0 42"/>
             </g>
 
+            <g class="hc-ring" id="hero-ring"><circle cx="0" cy="0" r="100"/></g>
+
             <g class="hc-mk" data-for="1"><circle cx="60" cy="146" r="19"/><text x="60" y="153" text-anchor="middle">1</text></g>
             <g class="hc-mk" data-for="2"><circle cx="290" cy="124" r="19"/><text x="290" y="131" text-anchor="middle">2</text></g>
             <g class="hc-mk" data-for="3"><circle cx="366" cy="150" r="19"/><text x="366" y="157" text-anchor="middle">3</text></g>
@@ -71,10 +73,8 @@
         <p class="hero-zoom__cap">Drawing of the concept. Dashed parts are exploratory. Not to scale.</p>
 
         <div class="hero-card" id="hero-card" aria-hidden="true">
-          <p class="hero-card__n"><span id="hero-card-n">1</span> of 6</p>
-          <h3 class="hero-card__t" id="hero-card-t"></h3>
-          <p class="hero-card__p" id="hero-card-p"></p>
-          <span class="exp-tag hero-card__tag" id="hero-card-tag" hidden></span>
+          <div class="hero-card__stack" id="hero-stack"></div>
+          <div class="hero-dots" id="hero-dots"><i class="hero-dots__line"><b id="hero-dots-fill"></b></i><span></span><span></span><span></span><span></span><span></span><span></span></div>
         </div>
 
         <ol class="hero-steps" id="hero-steps">

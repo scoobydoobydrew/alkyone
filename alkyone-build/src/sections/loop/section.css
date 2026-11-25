@@ -37,9 +37,20 @@
 #loop .loop-stage { overflow: hidden; }
 #loop .loop-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 #loop .loop-track { fill: none; stroke: var(--line); stroke-width: 1.2; }
-#loop .loop-core { fill: none; stroke: var(--accent); stroke-width: 2.4; stroke-linecap: round; opacity: .85; }
-#loop .loop-exp { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 3 9; opacity: .6; }
-#loop .loop-pulse { fill: var(--accent); filter: drop-shadow(0 0 7px var(--accent)); }
+#loop .loop-seg { fill: none; stroke: var(--accent); stroke-width: 2.4; stroke-linecap: round; opacity: .85; transition: opacity .5s var(--ease-out); }
+#loop .loop-seg--exp { stroke-width: 2; stroke-dasharray: 3 9; opacity: .6; }
+#loop .loop-seg.is-dim { opacity: .1; }
+/* the fallback route is drawn as a row of dots that fade in one after another (opacity only); unbuilt routes are hollow */
+#loop .loop-dot { fill: var(--warm); opacity: 0; }
+#loop .loop-dot--exp { fill: none; stroke: var(--warm); stroke-width: 1.6; }
+#loop .loop-pill { opacity: 0; transition: opacity .45s var(--ease-out); }
+#loop .loop-pill rect { fill: var(--bg); stroke: var(--fg-muted); stroke-width: 1.5; stroke-dasharray: 5 5; }
+#loop .loop-pill text { font: 600 15px var(--font-body); fill: var(--fg); }
+#loop .loop-pill .loop-pill__link { fill: none; stroke: var(--fg-muted); stroke-width: 1.6; stroke-dasharray: 3 7; stroke-linecap: round; }
+#loop .loop-pill .loop-pill__s { font-size: 12.5px; font-weight: 500; fill: var(--fg-muted); }
+#loop .loop-pill.is-on { opacity: 1; }
+#loop .loop-pulse.is-warm { fill: var(--warm); filter: drop-shadow(0 0 7px var(--warm)); }
+#loop .loop-pulse { fill: var(--accent); filter: drop-shadow(0 0 7px var(--accent)); will-change: transform; }
 #loop .loop-center__a, #loop .loop-center__b { font-family: var(--font-display); font-style: italic; font-size: 40px; fill: var(--fg); }
 #loop .loop-center__b { fill: var(--accent); }
 #loop .loop-nodes { position: absolute; inset: 0; }
@@ -63,7 +74,7 @@
 @media (hover: hover) and (pointer: fine) { #loop .loop-node:hover { transform: scale(1.06); } #loop .loop-node[aria-pressed="true"]:hover { transform: scale(1.1); } }
 @media (max-width: 420px) { #loop .loop-node { width: 3.4rem; height: 3.4rem; margin: -1.7rem 0 0 -1.7rem; } #loop .loop-node__n { font-size: 1.2rem; } #loop .loop-node__t { font-size: .6875rem; } #loop .loop-center__a, #loop .loop-center__b { font-size: 34px; } }
 
-#loop .loop-plate { max-width: 640px; }
+#loop .loop-plate { max-width: 640px; scroll-margin-top: calc(var(--nav-h, 64px) + 8px); }
 @media (max-width: 959px) { #loop .loop-plate { order: 2; } #loop .loop-panel { order: 3; } }
 @media (min-width: 960px) {
   #loop .loop-grid { row-gap: var(--s-6); align-items: center; }
@@ -75,6 +86,21 @@
 @keyframes loop-glow { 50% { box-shadow: 0 0 0 11px color-mix(in srgb, var(--accent) 6%, transparent); } }
 @media (prefers-reduced-motion: reduce) {
   #loop .loop-node, #loop .loop-card.is-in { animation: none !important; transition-duration: 1ms !important; }
-  #loop .loop-node.is-answer { animation: none !important; }
+  #loop .loop-node.is-answer, #loop .loop-node.is-flicker { animation: none !important; }
+  #loop .loop-pulse { will-change: auto; }
 }
 @media (max-width: 420px) { #loop .loop-plate .exp-tag { font-size: .6875rem; padding: .25rem .6rem .25rem .5rem; } #loop .loop-plate .plate__badges { top: 10px; left: 10px; } }
+
+/* simulator: the lit step, the broken step, the status line */
+#loop .loop-node { isolation: isolate; }
+#loop .loop-node::after { content: ''; position: absolute; inset: -8px; z-index: -1; border-radius: 50%; background: var(--accent); opacity: 0; transform: scale(.82); transition: opacity .35s var(--ease-out), transform .35s var(--ease-out); pointer-events: none; }
+#loop .loop-node.is-lit::after { opacity: .24; transform: scale(1); }
+#loop .loop-node.is-broken::after { background: var(--warm); opacity: .3; transform: scale(1); }
+#loop .loop-node.is-flicker { animation: loop-flicker 1.3s linear 1 both; }
+#loop .loop-again { justify-self: start; }
+#loop .loop-status { margin: 0; padding: var(--s-3) var(--s-4); min-height: 5.1rem; display: grid; grid-template-columns: auto 1fr; gap: .7rem; align-items: start; border-top: var(--hair) solid var(--line); font-size: .9375rem; line-height: 1.45; color: var(--fg); }
+#loop .loop-status__dot { width: 10px; height: 10px; margin-top: .45em; border-radius: 50%; background: var(--accent); }
+#loop[data-ph="fail"] .loop-status__dot, #loop[data-ph="fallback"] .loop-status__dot { background: var(--warm); }
+#loop .loop-status .exp-tag { margin-left: .35rem; }
+#loop:not(.is-enhanced) .loop-status, #loop:not(.is-enhanced) .loop-again { display: none; }
+@keyframes loop-flicker { 0%, 100% { opacity: 1; } 10% { opacity: .3; } 20% { opacity: 1; } 34% { opacity: .45; } 44% { opacity: .9; } 60% { opacity: .35; } 72% { opacity: 1; } 84% { opacity: .6; } }

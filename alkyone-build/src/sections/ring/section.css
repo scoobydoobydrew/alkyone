@@ -8,6 +8,22 @@
 #ring .ring-seg__opt input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
 #ring .ring-btns { display: flex; flex-wrap: wrap; gap: var(--s-3); }
 #ring .ring-btns .btn { white-space: normal; }
+/* Button states. Every state sets its own background AND text colour (white on teal-700 = 6.1:1, on teal-800 = 8.6:1,
+   ink on the pale tint > 10:1), so no state can leave light text on a light surface. */
+#ring .ring-btns .btn { transition-property: background-color, border-color, color, box-shadow, transform; }
+#ring .ring-btns .btn--primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+#ring .ring-btns .btn--ghost { background: transparent; color: var(--fg); border-color: var(--line-strong); }
+#ring .ring-btns .btn--ghost[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+@media (hover: hover) and (pointer: fine) {
+  #ring .ring-btns .btn--primary:hover:not(:disabled), #ring .ring-btns .btn--ghost[aria-pressed="true"]:hover { background: var(--accent-hover); color: var(--accent-ink); border-color: var(--accent-hover); }
+  #ring .ring-btns .btn--ghost:not([aria-pressed="true"]):hover { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+}
+#ring .ring-btns .btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+#ring .ring-btns .btn--primary:active:not(:disabled), #ring .ring-btns .btn--ghost:not([aria-pressed="true"]):active, #ring .ring-btns .btn--ghost[aria-pressed="true"]:active { background: var(--accent-hover); color: var(--accent-ink); border-color: var(--accent-hover); transform: scale(.97); }
+/* unavailable while the signal is lost: a flat, readable chip, not a faded one, and it does not react to hover */
+#ring .ring-btns .btn:disabled, #ring .ring-btns .btn:disabled:hover, #ring .ring-btns .btn:disabled:active {
+  opacity: 1; background: var(--surface-2); color: var(--fg-muted); border-color: var(--line-strong); box-shadow: none; transform: none; cursor: not-allowed;
+}
 #ring .ring-status { display: grid; grid-template-columns: auto 1fr; gap: .7rem; align-items: start; margin: 0; padding: var(--s-4); min-height: 4.4rem; border: var(--hair) solid var(--line); border-radius: var(--r-3); background: var(--surface-2); font-size: 1rem; line-height: 1.45; }
 #ring .ring-status__dot { width: 10px; height: 10px; margin-top: .45em; border-radius: 50%; background: var(--accent); }
 #ring[data-ringstate="attention"] .ring-status__dot, #ring[data-ringstate="alertlost"] .ring-status__dot { background: var(--warm); animation: ring-blink 1.2s ease-in-out infinite; }

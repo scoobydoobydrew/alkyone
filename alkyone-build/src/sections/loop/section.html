@@ -14,7 +14,8 @@
         <button type="button" class="chip loop-chip" data-case="nobody" aria-pressed="false">Nobody answers</button>
         <button type="button" class="chip loop-chip" data-case="battery" aria-pressed="false">Battery runs low <span class="exp-tag"></span></button>
       </div>
-      <div class="loop-card" id="loop-card" aria-live="polite" aria-atomic="true">
+      <button type="button" class="btn btn--ghost btn--sm loop-again" id="loop-again" hidden>Run again</button>
+      <div class="loop-card" id="loop-card">
         <p class="loop-card__idle">Tap a step on the loop to read what it does and what happens if it fails.</p>
       </div>
 
@@ -42,10 +43,15 @@
       <div class="plate__stage loop-stage" id="loop-stage">
         <svg class="loop-svg" viewBox="0 0 600 600" aria-hidden="true" focusable="false">
           <circle class="loop-track" cx="300" cy="300" r="216"/>
-          <path class="loop-core" id="loop-core" d="M300 84 A216 216 0 0 1 300 516"/>
-          <path class="loop-exp" d="M300 516 A216 216 0 0 1 300 84"/>
-          <path id="loop-run" d="M300 84 A216 216 0 0 1 300 516 A216 216 0 0 1 300 84" fill="none" stroke="none"/>
-          <circle class="loop-pulse" id="loop-pulse" r="7" cx="300" cy="84"/>
+          <path class="loop-seg loop-seg--core" data-i="0" d="M300.0 84.0 A216 216 0 0 1 487.1 192.0"/>
+          <path class="loop-seg loop-seg--core" data-i="1" d="M487.1 192.0 A216 216 0 0 1 487.1 408.0"/>
+          <path class="loop-seg loop-seg--core" data-i="2" d="M487.1 408.0 A216 216 0 0 1 300.0 516.0"/>
+          <path class="loop-seg loop-seg--exp" data-i="3" d="M300.0 516.0 A216 216 0 0 1 112.9 408.0"/>
+          <path class="loop-seg loop-seg--exp" data-i="4" d="M112.9 408.0 A216 216 0 0 1 112.9 192.0"/>
+          <path class="loop-seg loop-seg--exp" data-i="5" d="M112.9 192.0 A216 216 0 0 1 300.0 84.0"/>
+          <g id="loop-branches" aria-hidden="true"></g>
+          <g class="loop-pill" id="loop-pill"><path class="loop-pill__link" d="M258 410 C 268 440, 278 462, 291 482"/><rect x="162" y="362" width="132" height="48" rx="24"/><text x="228" y="383" text-anchor="middle">Second person</text><text x="228" y="400" text-anchor="middle" class="loop-pill__s">idea, not built</text></g>
+          <circle class="loop-pulse" id="loop-pulse" r="7" cx="0" cy="0"/>
           <g class="loop-center">
             <text x="300" y="292" text-anchor="middle" class="loop-center__a">closed</text>
             <text x="300" y="334" text-anchor="middle" class="loop-center__b">loop</text>
@@ -60,6 +66,7 @@
           <button type="button" class="loop-node loop-node--exp" data-id="check" style="--a:210" aria-pressed="false" aria-label="6, Self-check, exploratory"><span class="loop-node__n" aria-hidden="true">6</span><span class="loop-node__t" aria-hidden="true">Self-check</span></button>
         </div>
       </div>
+      <p class="loop-status" id="loop-status" role="status" aria-live="polite"><span class="loop-status__dot" aria-hidden="true"></span><span class="loop-status__t"><span id="loop-status-t">One pulse goes round the loop. Break a step to see what the fallback does.</span> <span class="exp-tag" id="loop-status-exp" hidden></span></span></p>
       <figcaption class="plate__caption">Illustration of the concept. Dashed steps are exploratory. It is not a tested system.</figcaption>
     </figure>
   </div>

@@ -718,7 +718,7 @@ setTimeout(function () { var a = window.Alkyone; if (!(a && a.ready)) document.d
 #hero {
   --hero-stage-h: clamp(310px, 54svh, 560px);
   --hero-stage-min: clamp(200px, 32svh, 260px);
-  --hero-track: 400svh;
+  --hero-track: 520svh;
   padding-block: 0;
 }
 #hero .hero-pin {
@@ -820,14 +820,6 @@ setTimeout(function () { var a = window.Alkyone; if (!(a && a.ready)) document.d
 #hero .hc-lab--exp { fill: var(--fg-muted); }
 #hero .hc-mk circle { fill: var(--bg); stroke: var(--accent); stroke-width: 2.5; }
 #hero .hc-mk text { font: italic 400 25px var(--font-display); fill: var(--accent); }
-#hero .hero-circuit .hc-part, #hero .hero-circuit .hc-mk { transition: opacity var(--dur-3) var(--ease-out); }
-#hero .hero-circuit[data-hl] .hc-part:not(.is-hl) { opacity: .32; }
-#hero .hero-circuit[data-hl] .hc-mk:not(.is-hl) { opacity: .45; }
-#hero .hc-part.is-hl .hc-halo, #hero .hc-part.is-hl .hc-glass, #hero .hc-part.is-hl .hc-pad { stroke: var(--warm); }
-#hero .hc-part.is-hl .hc-route, #hero .hc-part.is-hl .hc-node, #hero .hc-part.is-hl .hc-wave { stroke: var(--warm); }
-#hero .hc-part.is-hl .hc-mcu { fill: var(--warm-700); }
-#hero .hc-mk.is-hl circle { fill: var(--warm); stroke: var(--warm); }
-#hero .hc-mk.is-hl text { fill: #fff; }
 
 /* ---- pinned layout ---------------------------------------------------------------------------------------------- */
 #hero.is-pinned .hero-zoom { position: absolute; inset: 0; z-index: 4; margin: 0; padding: calc(var(--nav-h) + var(--s-3)) var(--gutter, 16px) 0; align-content: start; justify-items: center; gap: var(--s-3); opacity: 0; visibility: hidden; pointer-events: none; }
@@ -838,20 +830,29 @@ setTimeout(function () { var a = window.Alkyone; if (!(a && a.ready)) document.d
   padding: var(--s-4) var(--s-5); border: var(--hair) solid var(--line-strong); border-radius: var(--r-3);
   background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: var(--plate-shadow);
 }
-#hero.is-pinned .hero-card__n { margin: 0 0 .25rem; color: var(--fg-muted); font: 600 var(--fs-label)/1.2 var(--font-body); letter-spacing: .12em; text-transform: uppercase; }
-#hero.is-pinned .hero-card__t { margin: 0 0 .3rem; font: 400 1.65rem/1.1 var(--font-display); letter-spacing: -.005em; }
-#hero.is-pinned .hero-card__p { margin: 0; color: var(--fg-muted); font-size: 1rem; line-height: 1.5; }
-#hero.is-pinned .hero-card__tag { margin-top: .6rem; }
-#hero.is-pinned .hero-card.is-swap { animation: hero-swap .4s var(--ease-out) both; }
-@keyframes hero-swap { from { opacity: .2; transform: translate(-50%, 8px); } to { opacity: 1; transform: translateX(-50%); } }
+#hero .hero-card__n { margin: 0 0 .25rem; color: var(--fg-muted); font: 600 var(--fs-label)/1.2 var(--font-body); letter-spacing: .12em; text-transform: uppercase; }
+#hero .hero-card__t { margin: 0 0 .3rem; font: 400 1.65rem/1.1 var(--font-display); letter-spacing: -.005em; }
+#hero .hero-card__p { margin: 0; color: var(--fg-muted); font-size: 1rem; line-height: 1.5; }
+#hero .hero-card__tag { margin-top: .6rem; }
+/* The six cards sit on top of each other in one grid cell, so the card is as tall as the tallest one. Their opacity and
+   position are written from the scroll position (hero/section.js), so they scrub with the page in both directions. */
+#hero .hero-card__stack { display: grid; }
+#hero .hero-card__item { grid-area: 1 / 1; opacity: 0; visibility: hidden; will-change: transform, opacity; }
+#hero .hc-ring { opacity: 0; pointer-events: none; will-change: transform, opacity; }
+#hero .hc-ring circle { fill: color-mix(in srgb, var(--warm) 9%, transparent); stroke: var(--warm); stroke-width: 3; vector-effect: non-scaling-stroke; }
+#hero:not(.is-pinned) .hc-ring { display: none; }
+#hero .hero-dots { position: relative; display: flex; justify-content: space-between; align-items: center; height: 10px; margin: var(--s-3) 4px 0; }
+#hero .hero-dots__line { position: absolute; left: 4px; right: 4px; top: 50%; height: 2px; margin-top: -1px; background: var(--line); border-radius: 1px; overflow: hidden; }
+#hero .hero-dots__line b { display: block; width: 100%; height: 100%; background: var(--accent); transform: scaleX(0); transform-origin: 0 50%; }
+#hero .hero-dots span { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); opacity: .3; }
 
 @media (max-width: 420px) {
   #hero .hero-notice { font-size: .78rem; padding-inline: .75rem; }
   #hero .hero-cue__label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   #hero .hero-cue { padding-inline: 0; min-width: 44px; justify-content: center; }
   #hero.is-pinned .hero-card { padding: var(--s-3) var(--s-4); }
-  #hero.is-pinned .hero-card__t { font-size: 1.4rem; }
-  #hero.is-pinned .hero-card__p { font-size: .9375rem; }
+  #hero .hero-card__t { font-size: 1.4rem; }
+  #hero .hero-card__p { font-size: .9375rem; }
 }
 
 /* two columns: desktop, and a phone turned sideways (copy left, photo right) */
@@ -882,13 +883,12 @@ setTimeout(function () { var a = window.Alkyone; if (!(a && a.ready)) document.d
   #hero .hero-foot { margin-top: calc(var(--s-5) * -1); }
   #hero.is-pinned .hero-lens { width: min(100%, calc(36svh * 760 / 420)); }
   #hero.is-pinned .hero-card { width: min(60vw, 30rem); padding: var(--s-2) var(--s-4); }
-  #hero.is-pinned .hero-card__t { font-size: 1.2rem; } #hero.is-pinned .hero-card__p { font-size: .875rem; }
+  #hero .hero-card__t { font-size: 1.2rem; } #hero .hero-card__p { font-size: .875rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   #hero .hero-mark__ring, #hero .hero-cue__line i { animation: none !important; }
   #hero .hero-cue__line i { transform: translateY(8px); opacity: 1; }
-  #hero.is-pinned .hero-card.is-swap { animation: none !important; }
 }
 
 /* ===== sections/loop/section.css ===== */
@@ -931,9 +931,20 @@ setTimeout(function () { var a = window.Alkyone; if (!(a && a.ready)) document.d
 #loop .loop-stage { overflow: hidden; }
 #loop .loop-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 #loop .loop-track { fill: none; stroke: var(--line); stroke-width: 1.2; }
-#loop .loop-core { fill: none; stroke: var(--accent); stroke-width: 2.4; stroke-linecap: round; opacity: .85; }
-#loop .loop-exp { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 3 9; opacity: .6; }
-#loop .loop-pulse { fill: var(--accent); filter: drop-shadow(0 0 7px var(--accent)); }
+#loop .loop-seg { fill: none; stroke: var(--accent); stroke-width: 2.4; stroke-linecap: round; opacity: .85; transition: opacity .5s var(--ease-out); }
+#loop .loop-seg--exp { stroke-width: 2; stroke-dasharray: 3 9; opacity: .6; }
+#loop .loop-seg.is-dim { opacity: .1; }
+/* the fallback route is drawn as a row of dots that fade in one after another (opacity only); unbuilt routes are hollow */
+#loop .loop-dot { fill: var(--warm); opacity: 0; }
+#loop .loop-dot--exp { fill: none; stroke: var(--warm); stroke-width: 1.6; }
+#loop .loop-pill { opacity: 0; transition: opacity .45s var(--ease-out); }
+#loop .loop-pill rect { fill: var(--bg); stroke: var(--fg-muted); stroke-width: 1.5; stroke-dasharray: 5 5; }
+#loop .loop-pill text { font: 600 15px var(--font-body); fill: var(--fg); }
+#loop .loop-pill .loop-pill__link { fill: none; stroke: var(--fg-muted); stroke-width: 1.6; stroke-dasharray: 3 7; stroke-linecap: round; }
+#loop .loop-pill .loop-pill__s { font-size: 12.5px; font-weight: 500; fill: var(--fg-muted); }
+#loop .loop-pill.is-on { opacity: 1; }
+#loop .loop-pulse.is-warm { fill: var(--warm); filter: drop-shadow(0 0 7px var(--warm)); }
+#loop .loop-pulse { fill: var(--accent); filter: drop-shadow(0 0 7px var(--accent)); will-change: transform; }
 #loop .loop-center__a, #loop .loop-center__b { font-family: var(--font-display); font-style: italic; font-size: 40px; fill: var(--fg); }
 #loop .loop-center__b { fill: var(--accent); }
 #loop .loop-nodes { position: absolute; inset: 0; }
@@ -957,7 +968,7 @@ setTimeout(function () { var a = window.Alkyone; if (!(a && a.ready)) document.d
 @media (hover: hover) and (pointer: fine) { #loop .loop-node:hover { transform: scale(1.06); } #loop .loop-node[aria-pressed="true"]:hover { transform: scale(1.1); } }
 @media (max-width: 420px) { #loop .loop-node { width: 3.4rem; height: 3.4rem; margin: -1.7rem 0 0 -1.7rem; } #loop .loop-node__n { font-size: 1.2rem; } #loop .loop-node__t { font-size: .6875rem; } #loop .loop-center__a, #loop .loop-center__b { font-size: 34px; } }
 
-#loop .loop-plate { max-width: 640px; }
+#loop .loop-plate { max-width: 640px; scroll-margin-top: calc(var(--nav-h, 64px) + 8px); }
 @media (max-width: 959px) { #loop .loop-plate { order: 2; } #loop .loop-panel { order: 3; } }
 @media (min-width: 960px) {
   #loop .loop-grid { row-gap: var(--s-6); align-items: center; }
@@ -969,9 +980,24 @@ setTimeout(function () { var a = window.Alkyone; if (!(a && a.ready)) document.d
 @keyframes loop-glow { 50% { box-shadow: 0 0 0 11px color-mix(in srgb, var(--accent) 6%, transparent); } }
 @media (prefers-reduced-motion: reduce) {
   #loop .loop-node, #loop .loop-card.is-in { animation: none !important; transition-duration: 1ms !important; }
-  #loop .loop-node.is-answer { animation: none !important; }
+  #loop .loop-node.is-answer, #loop .loop-node.is-flicker { animation: none !important; }
+  #loop .loop-pulse { will-change: auto; }
 }
 @media (max-width: 420px) { #loop .loop-plate .exp-tag { font-size: .6875rem; padding: .25rem .6rem .25rem .5rem; } #loop .loop-plate .plate__badges { top: 10px; left: 10px; } }
+
+/* simulator: the lit step, the broken step, the status line */
+#loop .loop-node { isolation: isolate; }
+#loop .loop-node::after { content: ''; position: absolute; inset: -8px; z-index: -1; border-radius: 50%; background: var(--accent); opacity: 0; transform: scale(.82); transition: opacity .35s var(--ease-out), transform .35s var(--ease-out); pointer-events: none; }
+#loop .loop-node.is-lit::after { opacity: .24; transform: scale(1); }
+#loop .loop-node.is-broken::after { background: var(--warm); opacity: .3; transform: scale(1); }
+#loop .loop-node.is-flicker { animation: loop-flicker 1.3s linear 1 both; }
+#loop .loop-again { justify-self: start; }
+#loop .loop-status { margin: 0; padding: var(--s-3) var(--s-4); min-height: 5.1rem; display: grid; grid-template-columns: auto 1fr; gap: .7rem; align-items: start; border-top: var(--hair) solid var(--line); font-size: .9375rem; line-height: 1.45; color: var(--fg); }
+#loop .loop-status__dot { width: 10px; height: 10px; margin-top: .45em; border-radius: 50%; background: var(--accent); }
+#loop[data-ph="fail"] .loop-status__dot, #loop[data-ph="fallback"] .loop-status__dot { background: var(--warm); }
+#loop .loop-status .exp-tag { margin-left: .35rem; }
+#loop:not(.is-enhanced) .loop-status, #loop:not(.is-enhanced) .loop-again { display: none; }
+@keyframes loop-flicker { 0%, 100% { opacity: 1; } 10% { opacity: .3; } 20% { opacity: 1; } 34% { opacity: .45; } 44% { opacity: .9; } 60% { opacity: .35; } 72% { opacity: 1; } 84% { opacity: .6; } }
 
 /* ===== sections/patch/section.css ===== */
 /* ---- patch: a night plate with a 3D viewer (SVG twin underneath), five hotspots, one detail card ------------------ */
@@ -1204,6 +1230,22 @@ setTimeout(function () { var a = window.Alkyone; if (!(a && a.ready)) document.d
 #ring .ring-seg__opt input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
 #ring .ring-btns { display: flex; flex-wrap: wrap; gap: var(--s-3); }
 #ring .ring-btns .btn { white-space: normal; }
+/* Button states. Every state sets its own background AND text colour (white on teal-700 = 6.1:1, on teal-800 = 8.6:1,
+   ink on the pale tint > 10:1), so no state can leave light text on a light surface. */
+#ring .ring-btns .btn { transition-property: background-color, border-color, color, box-shadow, transform; }
+#ring .ring-btns .btn--primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+#ring .ring-btns .btn--ghost { background: transparent; color: var(--fg); border-color: var(--line-strong); }
+#ring .ring-btns .btn--ghost[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+@media (hover: hover) and (pointer: fine) {
+  #ring .ring-btns .btn--primary:hover:not(:disabled), #ring .ring-btns .btn--ghost[aria-pressed="true"]:hover { background: var(--accent-hover); color: var(--accent-ink); border-color: var(--accent-hover); }
+  #ring .ring-btns .btn--ghost:not([aria-pressed="true"]):hover { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+}
+#ring .ring-btns .btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+#ring .ring-btns .btn--primary:active:not(:disabled), #ring .ring-btns .btn--ghost:not([aria-pressed="true"]):active, #ring .ring-btns .btn--ghost[aria-pressed="true"]:active { background: var(--accent-hover); color: var(--accent-ink); border-color: var(--accent-hover); transform: scale(.97); }
+/* unavailable while the signal is lost: a flat, readable chip, not a faded one, and it does not react to hover */
+#ring .ring-btns .btn:disabled, #ring .ring-btns .btn:disabled:hover, #ring .ring-btns .btn:disabled:active {
+  opacity: 1; background: var(--surface-2); color: var(--fg-muted); border-color: var(--line-strong); box-shadow: none; transform: none; cursor: not-allowed;
+}
 #ring .ring-status { display: grid; grid-template-columns: auto 1fr; gap: .7rem; align-items: start; margin: 0; padding: var(--s-4); min-height: 4.4rem; border: var(--hair) solid var(--line); border-radius: var(--r-3); background: var(--surface-2); font-size: 1rem; line-height: 1.45; }
 #ring .ring-status__dot { width: 10px; height: 10px; margin-top: .45em; border-radius: 50%; background: var(--accent); }
 #ring[data-ringstate="attention"] .ring-status__dot, #ring[data-ringstate="alertlost"] .ring-status__dot { background: var(--warm); animation: ring-blink 1.2s ease-in-out infinite; }
@@ -1966,6 +2008,8 @@ setTimeout(function () { var a = window.Alkyone; if (!(a && a.ready)) document.d
               <path class="hc-wave" d="M452 196a14 14 0 0 1 0 24M464 187a26 26 0 0 1 0 42"/>
             </g>
 
+            <g class="hc-ring" id="hero-ring"><circle cx="0" cy="0" r="100"/></g>
+
             <g class="hc-mk" data-for="1"><circle cx="60" cy="146" r="19"/><text x="60" y="153" text-anchor="middle">1</text></g>
             <g class="hc-mk" data-for="2"><circle cx="290" cy="124" r="19"/><text x="290" y="131" text-anchor="middle">2</text></g>
             <g class="hc-mk" data-for="3"><circle cx="366" cy="150" r="19"/><text x="366" y="157" text-anchor="middle">3</text></g>
@@ -1977,10 +2021,8 @@ setTimeout(function () { var a = window.Alkyone; if (!(a && a.ready)) document.d
         <p class="hero-zoom__cap">Drawing of the concept. Dashed parts are exploratory. Not to scale.</p>
 
         <div class="hero-card" id="hero-card" aria-hidden="true">
-          <p class="hero-card__n"><span id="hero-card-n">1</span> of 6</p>
-          <h3 class="hero-card__t" id="hero-card-t"></h3>
-          <p class="hero-card__p" id="hero-card-p"></p>
-          <span class="exp-tag hero-card__tag" id="hero-card-tag" hidden></span>
+          <div class="hero-card__stack" id="hero-stack"></div>
+          <div class="hero-dots" id="hero-dots"><i class="hero-dots__line"><b id="hero-dots-fill"></b></i><span></span><span></span><span></span><span></span><span></span><span></span></div>
         </div>
 
         <ol class="hero-steps" id="hero-steps">
@@ -2017,7 +2059,8 @@ setTimeout(function () { var a = window.Alkyone; if (!(a && a.ready)) document.d
         <button type="button" class="chip loop-chip" data-case="nobody" aria-pressed="false">Nobody answers</button>
         <button type="button" class="chip loop-chip" data-case="battery" aria-pressed="false">Battery runs low <span class="exp-tag"></span></button>
       </div>
-      <div class="loop-card" id="loop-card" aria-live="polite" aria-atomic="true">
+      <button type="button" class="btn btn--ghost btn--sm loop-again" id="loop-again" hidden>Run again</button>
+      <div class="loop-card" id="loop-card">
         <p class="loop-card__idle">Tap a step on the loop to read what it does and what happens if it fails.</p>
       </div>
 
@@ -2045,10 +2088,15 @@ setTimeout(function () { var a = window.Alkyone; if (!(a && a.ready)) document.d
       <div class="plate__stage loop-stage" id="loop-stage">
         <svg class="loop-svg" viewBox="0 0 600 600" aria-hidden="true" focusable="false">
           <circle class="loop-track" cx="300" cy="300" r="216"/>
-          <path class="loop-core" id="loop-core" d="M300 84 A216 216 0 0 1 300 516"/>
-          <path class="loop-exp" d="M300 516 A216 216 0 0 1 300 84"/>
-          <path id="loop-run" d="M300 84 A216 216 0 0 1 300 516 A216 216 0 0 1 300 84" fill="none" stroke="none"/>
-          <circle class="loop-pulse" id="loop-pulse" r="7" cx="300" cy="84"/>
+          <path class="loop-seg loop-seg--core" data-i="0" d="M300.0 84.0 A216 216 0 0 1 487.1 192.0"/>
+          <path class="loop-seg loop-seg--core" data-i="1" d="M487.1 192.0 A216 216 0 0 1 487.1 408.0"/>
+          <path class="loop-seg loop-seg--core" data-i="2" d="M487.1 408.0 A216 216 0 0 1 300.0 516.0"/>
+          <path class="loop-seg loop-seg--exp" data-i="3" d="M300.0 516.0 A216 216 0 0 1 112.9 408.0"/>
+          <path class="loop-seg loop-seg--exp" data-i="4" d="M112.9 408.0 A216 216 0 0 1 112.9 192.0"/>
+          <path class="loop-seg loop-seg--exp" data-i="5" d="M112.9 192.0 A216 216 0 0 1 300.0 84.0"/>
+          <g id="loop-branches" aria-hidden="true"></g>
+          <g class="loop-pill" id="loop-pill"><path class="loop-pill__link" d="M258 410 C 268 440, 278 462, 291 482"/><rect x="162" y="362" width="132" height="48" rx="24"/><text x="228" y="383" text-anchor="middle">Second person</text><text x="228" y="400" text-anchor="middle" class="loop-pill__s">idea, not built</text></g>
+          <circle class="loop-pulse" id="loop-pulse" r="7" cx="0" cy="0"/>
           <g class="loop-center">
             <text x="300" y="292" text-anchor="middle" class="loop-center__a">closed</text>
             <text x="300" y="334" text-anchor="middle" class="loop-center__b">loop</text>
@@ -2063,6 +2111,7 @@ setTimeout(function () { var a = window.Alkyone; if (!(a && a.ready)) document.d
           <button type="button" class="loop-node loop-node--exp" data-id="check" style="--a:210" aria-pressed="false" aria-label="6, Self-check, exploratory"><span class="loop-node__n" aria-hidden="true">6</span><span class="loop-node__t" aria-hidden="true">Self-check</span></button>
         </div>
       </div>
+      <p class="loop-status" id="loop-status" role="status" aria-live="polite"><span class="loop-status__dot" aria-hidden="true"></span><span class="loop-status__t"><span id="loop-status-t">One pulse goes round the loop. Break a step to see what the fallback does.</span> <span class="exp-tag" id="loop-status-exp" hidden></span></span></p>
       <figcaption class="plate__caption">Illustration of the concept. Dashed steps are exploratory. It is not a tested system.</figcaption>
     </figure>
   </div>
@@ -5184,12 +5233,21 @@ setTimeout(function () { var a = window.Alkyone; if (!(a && a.ready)) document.d
       var $ = function (s) { return root.querySelector(s); };
       var pin = $('#hero-pin'), stage = $('#hero-stage'), photo = $('#hero-photo'), wrap = $('#hero-imgwrap'), copy = $('#hero-copy'), foot = $('#hero-foot');
       var zoom = $('#hero-zoom'), lens = $('#hero-lens'), kicker = $('.hero-zoom__kicker'), cap = $('.hero-zoom__cap'), card = $('#hero-card'), svg = $('#hero-circuit');
-      var cn = $('#hero-card-n'), ct = $('#hero-card-t'), cp = $('#hero-card-p'), cg = $('#hero-card-tag'), mark = $('.hero-mark__pad');
+      var mark = $('.hero-mark__pad'), stack = $('#hero-stack'), ring = $('#hero-ring'), dots = [].slice.call(root.querySelectorAll('#hero-dots span')), dotFill = $('#hero-dots-fill');
       var steps = [].map.call(root.querySelectorAll('#hero-steps li'), function (li) {
         return { part: li.getAttribute('data-part'), title: li.getAttribute('data-title'), text: li.querySelector('p').textContent.trim(), exp: !!li.getAttribute('data-exp') };
       });
       var parts = [].slice.call(svg.querySelectorAll('.hc-part')), mks = [].slice.call(svg.querySelectorAll('.hc-mk'));
-      var M = null, idx = -1, on = false, lastQ = -1;
+      var M = null, on = false, lastQ = -1;
+      /* where the highlight ring sits for each step, in the drawing's own units: centre x, centre y, radius */
+      var SPOT = [[147, 207, 108], [290, 210, 62], [290, 210, 90], [339, 296, 96], [442, 208, 62], [550, 210, 138]];
+      var N = steps.length, items = steps.map(function (s, i) {
+        var d = document.createElement('div'); d.className = 'hero-card__item';
+        d.innerHTML = '<p class="hero-card__n">' + (i + 1) + ' of ' + N + '</p><h3 class="hero-card__t"></h3><p class="hero-card__p"></p>' + (s.exp ? '<span class="exp-tag hero-card__tag">Exploratory</span>' : '');
+        d.querySelector('h3').textContent = s.title; d.querySelector('.hero-card__p').textContent = s.text;
+        stack.appendChild(d); return d;
+      });
+      var lerp = function (a, b, t) { return a + (b - a) * t; };
 
       function measure() {
         var save = [photo.style.transform, lens.style.transform];
@@ -5205,51 +5263,57 @@ setTimeout(function () { var a = window.Alkyone; if (!(a && a.ready)) document.d
         photo.style.transform = save[0]; lens.style.transform = save[1];
       }
 
-      function setStep(i) {
-        if (i === idx) return; idx = i;
-        parts.forEach(function (g) { g.classList.toggle('is-hl', i >= 0 && g.getAttribute('data-part') === steps[i].part); });
-        mks.forEach(function (g) { g.classList.toggle('is-hl', i >= 0 && g.getAttribute('data-for') === steps[i].part); });
-        if (i < 0) { svg.removeAttribute('data-hl'); return; }
-        svg.setAttribute('data-hl', '1');
-        var s = steps[i];
-        cn.textContent = String(i + 1); ct.textContent = s.title; cp.textContent = s.text; cg.hidden = !s.exp; if (s.exp) cg.textContent = 'Exploratory';
-        card.classList.remove('is-swap'); void card.offsetWidth; if (!A.reduced) card.classList.add('is-swap');
-      }
-
       function update() {
         if (!on || !M) return;
         var r = root.getBoundingClientRect(), total = Math.max(1, root.offsetHeight - window.innerHeight);
         var q = clamp(-r.top / total, 0, 1);
         if (Math.abs(q - lastQ) < .0004) return; lastQ = q;
         /* 1. the photo zooms toward the patch */
-        var e = easeIO(clamp(q / .4)), s = 1 + (M.S - 1) * e;
+        var e = easeIO(clamp(q / .32)), s = 1 + (M.S - 1) * e;
         var cx = M.P0.x + (M.C.x - M.P0.x) * e, cy = M.P0.y + (M.C.y - M.P0.y) * e;
         photo.style.transform = 'translate3d(' + (cx - M.sx - s * M.px).toFixed(1) + 'px,' + (cy - M.sy - s * M.py).toFixed(1) + 'px,0) scale(' + s.toFixed(3) + ')';
-        var po = 1 - smooth(.3, .48, q); photo.style.opacity = po.toFixed(3); photo.style.visibility = po < .01 ? 'hidden' : '';
+        var po = 1 - smooth(.24, .4, q); photo.style.opacity = po.toFixed(3); photo.style.visibility = po < .01 ? 'hidden' : '';
         /* copy and foot step aside */
         var co = 1 - smooth(0, .16, q); copy.style.opacity = co.toFixed(3); copy.style.transform = 'translate3d(0,' + (-28 * (1 - co)).toFixed(1) + 'px,0)'; copy.style.visibility = co < .01 ? 'hidden' : '';
         var fo = 1 - smooth(0, .1, q); foot.style.opacity = fo.toFixed(3); foot.style.visibility = fo < .01 ? 'hidden' : '';
         stage.querySelector('.hero-caption').style.opacity = (1 - smooth(0, .12, q)).toFixed(3);
         /* 2. the flexible circuit arrives and grows to fill the plate */
-        var zo = smooth(.3, .46, q);
+        var zo = smooth(.24, .38, q);
         zoom.style.opacity = zo > .005 ? '1' : '0'; zoom.style.visibility = zo > .005 ? 'visible' : 'hidden';
-        var k = M.k0 + (1 - M.k0) * easeO(smooth(.3, .64, q));
+        var k = M.k0 + (1 - M.k0) * easeO(smooth(.24, .52, q));
         lens.style.opacity = zo.toFixed(3); lens.style.transform = 'scale(' + k.toFixed(3) + ')';
-        var to = smooth(.52, .64, q); kicker.style.opacity = to.toFixed(3); cap.style.opacity = to.toFixed(3);
-        /* 3. one callout at a time */
-        var f = clamp((q - .58) / .42), i = q < .58 ? -1 : Math.min(steps.length - 1, Math.floor(f * steps.length));
-        setStep(i);
-        card.style.opacity = smooth(.56, .62, q).toFixed(3);
+        var to = smooth(.44, .54, q); kicker.style.opacity = to.toFixed(3); cap.style.opacity = to.toFixed(3);
+        /* 3. the six cards, scrubbed by scroll. Position p runs 0..N over the card phase; between two steps the old card
+              slides up and fades while the new one slides in over it, and the ring glides from one part to the next. */
+        var cardIn = smooth(.5, .56, q), f = clamp((q - .54) / .4);
+        var a = clamp(f * N - .5, 0, N - 1), i0 = Math.min(N - 2, Math.floor(a)), t = smooth(.25, .75, a - i0), pos = i0 + t;
+        card.style.opacity = cardIn.toFixed(3); card.style.visibility = cardIn < .01 ? 'hidden' : '';
+        var mv = A.reduced ? 0 : 22;
+        items.forEach(function (it, i) {
+          var o = 0, y = 0;
+          if (i === i0) { o = 1 - smooth(.05, .65, t); y = -mv * smooth(0, 1, t); }
+          else if (i === i0 + 1) { o = smooth(.35, .95, t); y = mv * (1 - smooth(0, 1, t)); }
+          it.style.opacity = o.toFixed(3); it.style.visibility = o < .01 ? 'hidden' : 'visible'; it.style.transform = 'translate3d(0,' + y.toFixed(1) + 'px,0)';
+        });
+        var w = function (i) { return i === i0 ? 1 - t : i === i0 + 1 ? t : 0; };
+        var dim = smooth(.5, .58, q), part = function (el, k, lo) { el.style.opacity = (1 - dim * (1 - (lo + (1 - lo) * w(k)))).toFixed(3); };
+        parts.forEach(function (g) { part(g, +g.getAttribute('data-part') - 1, .3); });
+        mks.forEach(function (g) { part(g, +g.getAttribute('data-for') - 1, .42); });
+        var c0 = SPOT[i0], c1 = SPOT[i0 + 1], rs = lerp(c0[2], c1[2], t) / 100;
+        ring.style.opacity = dim.toFixed(3);
+        ring.style.transform = 'translate(' + lerp(c0[0], c1[0], t).toFixed(1) + 'px,' + lerp(c0[1], c1[1], t).toFixed(1) + 'px) scale(' + rs.toFixed(3) + ')';
+        dotFill.style.transform = 'scaleX(' + (pos / (N - 1)).toFixed(4) + ')';
+        dots.forEach(function (d, i) { d.style.opacity = (.3 + .7 * clamp(pos - i + 1, 0, 1)).toFixed(3); d.style.transform = 'scale(' + (.8 + .45 * w(i)).toFixed(3) + ')'; });
       }
 
       function pinOn() {
-        if (on) return; on = true; root.classList.add('is-pinned'); lastQ = -1; idx = -2; measure(); update();
+        if (on) return; on = true; root.classList.add('is-pinned'); lastQ = -1; measure(); update();
       }
       function pinOff() {
         on = false; root.classList.remove('is-pinned');
-        [photo, lens, copy, foot, zoom, card, kicker, cap].forEach(function (n) { n.style.cssText = ''; });
+        [photo, lens, copy, foot, zoom, card, kicker, cap, ring, dotFill].forEach(function (n) { n.style.cssText = ''; });
         var c = stage.querySelector('.hero-caption'); if (c) c.style.cssText = '';
-        parts.forEach(function (g) { g.classList.remove('is-hl'); }); mks.forEach(function (g) { g.classList.remove('is-hl'); }); svg.removeAttribute('data-hl'); idx = -1;
+        items.concat(parts, mks, dots).forEach(function (n) { n.style.cssText = ''; });
       }
       function sync() { if (A.reduced) pinOff(); else pinOn(); }
 
@@ -5272,44 +5336,117 @@ setTimeout(function () { var a = window.Alkyone; if (!(a && a.ready)) document.d
 (function () {
   'use strict';
   var A = window.Alkyone;
-  /* what each broken step does: all of it is concept wording, built from the brief */
+  var TH = [-90, -30, 30, 90, 150, 210];                       /* where each step sits on the circle, in degrees */
+  var IDS = ['sense', 'send', 'alert', 'ack', 'learn', 'check'];
+  var NAME = ['Notice', 'Send', 'Alert', 'Acknowledge', 'Learn', 'Self-check'];
+  var EXPSTEP = [false, false, false, false, true, true];
+  /* the line shown while the pulse goes round on its own: built from the step wording already on the page */
+  var IDLE = [
+    'Notice. The patch notices what is going on with the baby.',
+    'Send. The patch sends it to the ring, with a steady heartbeat.',
+    'Alert. The ring buzzes: soft for routine, firm for needs attention.',
+    'Acknowledge. Tap the ring and the loop closes.',
+    'Learn. Learning what is typical for this baby.',
+    'Self-check. Warning about a weak battery or poor contact early.'
+  ];
+  var IDLE_START = 'One pulse goes round the loop. Break a step to see what the fallback does.';
+  /* what each broken step does and where the fallback goes: all concept wording from the brief; "d" is the fallback route in drawing units */
   var CASES = {
-    signal: { title: 'The signal drops', broken: 'send', answer: 'alert', text: 'The heartbeat from the patch stops. Silence is treated as an alert, so the ring buzzes firmly instead of waiting.' },
-    off: { title: 'The patch comes off', broken: 'sense', answer: 'alert', text: 'Wear detection notices the patch is no longer on the skin. That is something to tell you about, not a reason to go quiet.' },
-    nobody: { title: 'Nobody answers', broken: 'ack', answer: 'alert', text: 'The firm pattern keeps repeating until someone acknowledges it.', note: 'Passing it on to a second person is an idea we want to explore.', exp: true },
-    battery: { title: 'The battery runs low', broken: 'sense', answer: 'check', text: 'Self-checking electronics could warn about a weak battery, poor skin contact or a fading signal before they cause trouble.', note: 'This is an idea we want to explore. It is not built.', exp: true }
+    signal: { title: 'The signal drops', broken: 'send', answer: 'alert', d: 'M487 192 C 380 230, 380 370, 487 408',
+      text: 'The heartbeat from the patch stops. Silence is treated as an alert, so the ring buzzes firmly instead of waiting.',
+      fail: 'Send breaks. The heartbeat from the patch stops, and the link on to Alert goes quiet.',
+      fb: 'Fallback: silence is treated as an alert.', go: 'The fallback route carries the alert straight to the ring.', back: 'The loop reconnects. The ring buzzes firmly instead of waiting.' },
+    off: { title: 'The patch comes off', broken: 'sense', answer: 'alert', d: 'M300 84 C 390 150, 470 270, 487 408',
+      text: 'Wear detection notices the patch is no longer on the skin. That is something to tell you about, not a reason to go quiet.',
+      fail: 'Notice breaks. The patch is no longer on the skin, and the link on to Send goes quiet.',
+      fb: 'Fallback: wear detection says so instead of going quiet.', go: 'The fallback route takes the message to the ring.', back: 'The loop reconnects. The ring tells you the patch is off.' },
+    nobody: { title: 'Nobody answers', broken: 'ack', answer: 'alert', d: 'M300 516 C 320 420, 430 380, 487 408', pill: true, exp: true,
+      text: 'The firm pattern keeps repeating until someone acknowledges it.', note: 'Passing it on to a second person is an idea we want to explore.',
+      fail: 'Acknowledge breaks. Nobody answers the ring.',
+      fb: 'Fallback: the alert repeats until someone acknowledges it.', go: 'The alert goes round again, firm and repeating.',
+      extra: 'Passing it on to a second person is an idea we want to explore. It is not built.', back: 'The loop reconnects at Alert and keeps repeating until someone answers.' },
+    battery: { title: 'The battery runs low', broken: 'check', answer: 'alert', d: 'M113 192 C 190 330, 330 430, 487 408', exp: true,
+      text: 'Self-checking electronics could warn about a weak battery, poor skin contact or a fading signal before they cause trouble.', note: 'This is an idea we want to explore. It is not built.',
+      fail: 'Self-check flags a low battery. It is an idea we want to explore.',
+      fb: 'Fallback: warn early, before trouble starts.', go: 'The early warning goes to the ring.', back: 'The loop reconnects. This is an idea we want to explore. It is not built.' }
   };
+  var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
+  var ease = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+  var NS = 'http://www.w3.org/2000/svg';
 
   window.Alkyone.section('loop', {
     init: function (ctx) {
       var root = ctx.el;
       var $ = function (s) { return root.querySelector(s); };
       var nodes = [].slice.call(root.querySelectorAll('.loop-node')), chips = [].slice.call(root.querySelectorAll('.loop-chip'));
-      var card = $('#loop-card'), run = $('#loop-run'), pulse = $('#loop-pulse'), steps = {};
+      var segs = [].slice.call(root.querySelectorAll('.loop-seg'));
+      var plate = $('.loop-plate'), card = $('#loop-card'), pulse = $('#loop-pulse'), again = $('#loop-again'), pill = $('#loop-pill'), bg = $('#loop-branches');
+      var statusT = $('#loop-status-t'), statusX = $('#loop-status-exp'), steps = {};
       [].forEach.call(root.querySelectorAll('.loop-steps li'), function (li) { steps[li.getAttribute('data-id')] = li; });
-      var selNode = null, selCase = null, unsub = null, len = 0, t0 = 0;
+      var selNode = null, selCase = null, unsub = null;
+      var ring = -90;                 /* where the pulse is on the circle (degrees) */
+      var seq = null, timer = 0, litIx = -1, lastIdle = -1;
 
-      function clearMarks() { nodes.forEach(function (n) { n.classList.remove('is-broken', 'is-answer'); n.setAttribute('aria-pressed', 'false'); }); }
-      function nodeEl(id) { for (var i = 0; i < nodes.length; i++) if (nodes[i].getAttribute('data-id') === id) return nodes[i]; return null; }
+      /* ---- the fallback routes, each drawn as a row of dots ---- */
+      var routes = {};
+      Object.keys(CASES).forEach(function (key) {
+        var k = CASES[key], pth = document.createElementNS(NS, 'path'); pth.setAttribute('d', k.d); pth.style.visibility = 'hidden'; bg.appendChild(pth);
+        var len = pth.getTotalLength(), n = Math.max(6, Math.round(len / 14)), dots = [];
+        for (var i = 0; i < n; i++) {
+          var pt = pth.getPointAtLength(len * (i + .5) / n), c = document.createElementNS(NS, 'circle');
+          c.setAttribute('class', 'loop-dot' + (k.exp ? ' loop-dot--exp' : '')); c.setAttribute('r', k.exp ? '3.6' : '3.4'); c.setAttribute('cx', pt.x.toFixed(1)); c.setAttribute('cy', pt.y.toFixed(1)); bg.appendChild(c); dots.push(c);
+        }
+        routes[key] = { path: pth, len: len, dots: dots };
+      });
+
+      /* ---- small helpers ---- */
+      function idx(id) { return IDS.indexOf(id); }
+      function nodeEl(id) { return nodes[idx(id)] || null; }
+      function say(text, exp, ph) {
+        statusT.textContent = text; statusX.hidden = !exp; if (ph) root.setAttribute('data-ph', ph); else root.removeAttribute('data-ph');
+      }
+      function setPulse(x, y, warm) { pulse.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)'; pulse.classList.toggle('is-warm', !!warm); }
+      function onRing(th) {
+        var r = th * Math.PI / 180; ring = th; setPulse(300 + 216 * Math.cos(r), 300 + 216 * Math.sin(r), false);
+        pulse.style.opacity = (((th + 90) % 360 + 360) % 360) < 240 ? '1' : '.45';
+      }
+      function lightAt(th) {
+        var best = -1, bd = 14;
+        for (var i = 0; i < TH.length; i++) { var d = Math.abs((((th - TH[i]) % 360) + 540) % 360 - 180); if (d < bd) { bd = d; best = i; } }
+        if (best !== litIx) { if (litIx >= 0) nodes[litIx].classList.remove('is-lit'); litIx = best; if (best >= 0) nodes[best].classList.add('is-lit'); return true; }
+        return false;
+      }
+      function unlight() { if (litIx >= 0) nodes[litIx].classList.remove('is-lit'); litIx = -1; }
+      function clearMarks() { nodes.forEach(function (n) { n.classList.remove('is-broken', 'is-answer', 'is-flicker'); n.setAttribute('aria-pressed', 'false'); }); }
+      function clearSim() {
+        clearTimeout(timer); timer = 0; seq = null; unlight();
+        nodes.forEach(function (n) { n.classList.remove('is-broken', 'is-answer', 'is-flicker'); });
+        segs.forEach(function (g) { g.classList.remove('is-dim'); });
+        Object.keys(routes).forEach(function (k) { routes[k].dots.forEach(function (d) { d.style.opacity = '0'; }); });
+        pill.classList.remove('is-on'); root.removeAttribute('data-ph');
+      }
+
+      /* ---- the card: the existing explanation text ---- */
       function show(build) {
         card.textContent = ''; build(card); card.classList.remove('is-in'); void card.offsetWidth; if (!A.reduced) card.classList.add('is-in');
       }
       function tag() { var s = document.createElement('span'); s.className = 'exp-tag'; return s; }
-      function idle() {
+      function cardIdle() {
         show(function (c) { var p = document.createElement('p'); p.className = 'loop-card__idle'; p.textContent = 'Tap a step on the loop to read what it does and what happens if it fails.'; c.appendChild(p); });
+      }
+      function cardCase(k) {
+        show(function (c) {
+          var h = document.createElement('h3'); h.textContent = k.title; c.appendChild(h);
+          var p = document.createElement('p'); p.textContent = k.text; c.appendChild(p);
+          if (k.note) { var q = document.createElement('p'); q.className = 'loop-fb'; q.textContent = k.note; c.appendChild(q); }
+          if (k.exp) c.appendChild(tag());
+        });
       }
       function paint() {
         clearMarks(); chips.forEach(function (c) { c.setAttribute('aria-pressed', c.getAttribute('data-case') === selCase ? 'true' : 'false'); });
-        if (selCase) {
-          var k = CASES[selCase], b = nodeEl(k.broken), a = nodeEl(k.answer);
-          if (b) b.classList.add('is-broken'); if (a) a.classList.add('is-answer');
-          show(function (c) {
-            var h = document.createElement('h3'); h.textContent = k.title; c.appendChild(h);
-            var p = document.createElement('p'); p.textContent = k.text; c.appendChild(p);
-            if (k.note) { var q = document.createElement('p'); q.className = 'loop-fb'; q.textContent = k.note; c.appendChild(q); }
-            if (k.exp) c.appendChild(tag());
-          });
-        } else if (selNode) {
+        again.hidden = !selCase;
+        if (selCase) return;
+        if (selNode) {
           var n = nodeEl(selNode), li = steps[selNode];
           if (n) n.setAttribute('aria-pressed', 'true');
           show(function (c) {
@@ -5317,25 +5454,97 @@ setTimeout(function () { var a = window.Alkyone; if (!(a && a.ready)) document.d
             [].forEach.call(li.querySelectorAll('p'), function (p) { c.appendChild(p.cloneNode(true)); });
             if (li.getAttribute('data-exp')) c.appendChild(tag());
           });
-        } else idle();
+        } else cardIdle();
       }
-      nodes.forEach(function (n) { n.addEventListener('click', function () { var id = n.getAttribute('data-id'); selCase = null; selNode = selNode === id ? null : id; paint(); }); });
-      chips.forEach(function (c) { c.addEventListener('click', function () { var k = c.getAttribute('data-case'); selNode = null; selCase = selCase === k ? null : k; paint(); }); });
 
-      /* the pulse circles the loop: first half (the built steps) bright, second half (exploratory) dim */
-      function place(f) {
-        var pt = run.getPointAtLength(len * f); pulse.setAttribute('cx', pt.x.toFixed(1)); pulse.setAttribute('cy', pt.y.toFixed(1));
-        pulse.style.opacity = f < .5 ? '1' : '.4';
+      /* ---- one failure, as a list of phases. Each phase has a length, a line for the status, and at(u) for 0..1 ---- */
+      function build(key) {
+        var k = CASES[key], b = idx(k.broken), a = idx(k.answer), rt = routes[key], bn = nodes[b], an = nodes[a], seg = segs[b];
+        var from = ring, dist = (((TH[b] - from) % 360) + 360) % 360, ph = [];
+        ph.push({ dur: dist < 2 ? 250 : Math.max(650, dist / 60 * 750), say: 'The pulse goes round to ' + NAME[b] + '.', ph: 'run', exp: false,
+          at: function (u) { onRing(from + dist * ease(u)); lightAt(ring); } });
+        ph.push({ dur: 1500, say: k.fail, exp: !!EXPSTEP[b], ph: 'fail',
+          enter: function () { unlight(); onRing(TH[b]); bn.classList.add('is-broken'); if (!A.reduced) { bn.classList.remove('is-flicker'); void bn.offsetWidth; bn.classList.add('is-flicker'); } seg.classList.add('is-dim'); },
+          at: function () {} });
+        ph.push({ dur: 1000, say: k.fb, exp: !!k.exp, ph: 'fallback',
+          enter: function () { cardCase(k); },
+          at: function (u) { var n = rt.dots.length; rt.dots.forEach(function (d, i) { d.style.opacity = A.reduced ? '1' : clamp(u * n * 1.15 - i, 0, 1).toFixed(2); }); } });
+        ph.push({ dur: 1200, say: k.go, exp: !!k.exp, ph: 'fallback',
+          enter: function () { setPulse(0, 0, true); },
+          at: function (u) { var pt = rt.path.getPointAtLength(rt.len * ease(u)); setPulse(pt.x, pt.y, true); pulse.style.opacity = k.exp ? '.7' : '1'; if (u >= 1) an.classList.add('is-answer'); } });
+        if (k.pill) ph.push({ dur: 1700, say: k.extra, exp: true, ph: 'fallback', enter: function () { pill.classList.add('is-on'); }, at: function () {} });
+        ph.push({ dur: 1500, say: k.back, exp: !!k.exp, ph: 'back',
+          enter: function () { bn.classList.remove('is-broken', 'is-flicker'); seg.classList.remove('is-dim'); onRing(TH[a]); },
+          at: function (u) { rt.dots.forEach(function (d) { d.style.opacity = A.reduced ? '0' : (1 - ease(clamp(u * 1.4, 0, 1))).toFixed(2); }); if (u > .6) { pill.classList.remove('is-on'); an.classList.remove('is-answer'); } } });
+        return ph;
       }
-      function start() {
-        if (unsub || A.reduced) return;
-        t0 = performance.now(); len = run.getTotalLength();
-        unsub = A.raf(function () { place(((performance.now() - t0) / 10000) % 1); }, { fps: 30 });
+      function begin(key) {
+        clearSim(); selCase = key; paint();
+        /* on a phone the diagram sits above the buttons: bring it into view so the sequence can be watched */
+        if (plate && window.matchMedia('(max-width: 959px)').matches) {
+          var r = plate.getBoundingClientRect();
+          if (r.top < 60 || r.bottom > window.innerHeight) plate.scrollIntoView({ block: 'start', behavior: A.reduced ? 'auto' : 'smooth' });
+        }
+        seq = { key: key, ph: build(key), i: -1, t: 0 };
+        advance();
+        if (A.reduced) stepTimer();
+        else if (!unsub) start();
       }
+      function advance() {
+        var s = seq; if (!s) return;
+        if (s.i >= 0) s.ph[s.i].at(1);
+        s.i++;
+        if (s.i >= s.ph.length) { finish(); return; }
+        var p = s.ph[s.i]; s.t = 0;
+        if (p.enter) p.enter(); say(p.say, p.exp, p.ph);
+        p.at(A.reduced ? 1 : 0);
+      }
+      function finish() {
+        var k = CASES[seq.key]; seq = null; clearTimeout(timer); timer = 0;
+        nodes.forEach(function (n) { n.classList.remove('is-flicker'); });
+        onRing(TH[idx(k.answer)]); lastIdle = -1;
+        say('Loop closed again. Pick another failure, or run this one again.', false, '');
+      }
+      /* reduced motion: no travelling, each phase just shows its result and waits */
+      function stepTimer() {
+        timer = setTimeout(function () { if (!seq) return; advance(); if (seq) stepTimer(); }, 2400);
+      }
+
+      /* ---- frame loop: the pulse goes round on its own, or plays the current failure ---- */
+      function frame(t, dt) {
+        if (seq) {
+          var p = seq.ph[seq.i]; seq.t += dt; var u = clamp(seq.t / p.dur, 0, 1); p.at(u);
+          if (u >= 1) advance();
+          return;
+        }
+        onRing(ring + dt * 60 / 1800);
+        if (lightAt(ring) && litIx >= 0 && !selCase) { lastIdle = litIx; say(IDLE[litIx], EXPSTEP[litIx], ''); }
+        else if (litIx < 0 && !selCase) { /* between steps: keep the last line */ }
+      }
+      function start() { if (unsub || A.reduced) return; unsub = A.raf(frame, { fps: 60 }); }
       function stop() { if (unsub) { unsub(); unsub = null; } }
+      function still() { stop(); clearSim(); selCase = null; paint(); onRing(-90); }
+
+      /* ---- controls ---- */
+      nodes.forEach(function (n) { n.addEventListener('click', function () {
+        var id = n.getAttribute('data-id'); clearSim(); selCase = null; selNode = selNode === id ? null : id; paint();
+        say(selNode ? IDLE[idx(id)] : IDLE_START, selNode ? EXPSTEP[idx(id)] : false, '');
+        if (!A.reduced && !unsub) start();
+      }); });
+      chips.forEach(function (c) { c.addEventListener('click', function () {
+        var k = c.getAttribute('data-case'); selNode = null;
+        if (selCase === k) { clearSim(); selCase = null; paint(); say(IDLE_START, false, ''); if (!A.reduced && !unsub) start(); return; }
+        begin(k);
+      }); });
+      again.addEventListener('click', function () { if (selCase) begin(selCase); });
+
       root.classList.add('is-enhanced'); paint();
-      api = { start: start, stop: stop, still: function () { stop(); try { len = run.getTotalLength(); place(0); } catch (e) {} } };
-      if (A.reduced) api.still();
+      api = {
+        start: start,
+        stop: stop,
+        still: function () { still(); say(IDLE_START, false, ''); }
+      };
+      if (A.reduced) api.still(); else onRing(-90);
     },
     enter: function () { if (api) api.start(); },
     leave: function () { if (api) api.stop(); },
