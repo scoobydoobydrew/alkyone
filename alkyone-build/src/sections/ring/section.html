@@ -1,0 +1,54 @@
+<section id="ring" class="sec" data-theme="mist" aria-labelledby="ring-title">
+  <div class="container sec__grid ring-grid">
+    <div class="sec__head ring-head">
+      <p class="eyebrow" data-reveal><span class="eyebrow__num">3</span> <span class="eyebrow__text">The ring</span></p>
+      <h2 class="h2" id="ring-title" data-reveal="lines">The alert goes to your hand.</h2>
+      <p class="lede" data-reveal data-reveal-delay="1">The ring buzzes in different patterns. One for routine, another for needs attention.</p>
+    </div>
+
+    <div class="ring-panel" data-reveal data-reveal-delay="1">
+      <fieldset class="ring-seg">
+        <legend class="label">Kind of alert</legend>
+        <label class="ring-seg__opt"><input type="radio" name="ring-kind" value="routine" checked><span>Routine</span></label>
+        <label class="ring-seg__opt"><input type="radio" name="ring-kind" value="attention"><span>Needs attention</span></label>
+      </fieldset>
+      <div class="ring-btns">
+        <button type="button" class="btn btn--primary btn--sm" id="ring-event">Simulate event</button>
+        <button type="button" class="btn btn--ghost btn--sm" id="ring-lost" aria-pressed="false">Simulate lost signal</button>
+      </div>
+      <p class="ring-status" id="ring-status"><span class="ring-status__dot" aria-hidden="true"></span><span id="ring-status-text">Linked. The patch sends a steady heartbeat.</span></p>
+      <p class="ring-hint">Tap the ring to acknowledge.</p>
+      <p class="ring-note small t-muted">The patch and the ring talk over <button type="button" class="term" data-term="ble">BLE</button>. A steady <button type="button" class="term" data-term="heartbeat">heartbeat</button> tells the ring the patch is still there.</p>
+    </div>
+
+    <figure class="plate sec__visual ring-plate" data-reveal>
+      <div class="plate__badges"><span class="sim-tag"></span></div>
+      <div class="plate__stage ring-stage" id="ring-stage">
+        <svg class="ring-svg" id="ring-svg" viewBox="0 0 900 560" role="img" aria-labelledby="ring-desc" focusable="false">
+          <title id="ring-desc">An illustration: a small patch on a chest, a wireless link, and a ring on a finger.</title>
+          <g id="ring-chest-g" transform="translate(84.5 273) scale(2.2)"><!--@include chest.svg.html--></g>
+          <g id="ring-hand-g" transform="translate(677.9 230) scale(1.2)"><!--@include hand.svg.html--></g>
+          <path class="ring-link" id="ring-link-path" d="M180 320 C 290 300, 330 150, 556 140" fill="none"/>
+          <g class="ring-patch" id="ring-patch-g" transform="translate(150 328) rotate(-12)">
+            <circle class="ring-halo" r="40"/>
+            <rect class="ring-patch__body" x="-30" y="-19" width="60" height="38" rx="14"/>
+            <rect class="ring-patch__core" x="-17" y="-8" width="34" height="16" rx="6"/>
+            <circle class="ring-patch__dot" r="3.2" cx="9" cy="0"/>
+          </g>
+          <g class="ring-ringg" id="ring-ring-g" transform="translate(583 135)">
+            <circle class="ring-ripple" r="16"/><circle class="ring-ripple ring-ripple--2" r="16"/><circle class="ring-ripple ring-ripple--3" r="16"/>
+            <circle class="ring-halo" r="32"/>
+            <g class="ring-shake"><ellipse class="ring-band" rx="15" ry="6.5" transform="rotate(-33)"/><ellipse class="ring-band ring-band--in" rx="15" ry="6.5" transform="rotate(-33)"/></g>
+          </g>
+          <circle class="ring-pulse" id="ring-pulse" r="7" cx="180" cy="320" opacity="0"/>
+        </svg>
+        <button type="button" class="ring-ringbtn" id="ring-ringbtn" aria-label="Ring. Linked."><span class="ring-ringbtn__ring"></span></button>
+      </div>
+      <div class="ring-strips">
+        <div class="ring-strip"><span class="ring-strip__l">Heartbeat</span><span class="ring-pips" aria-hidden="true"><i class="ring-pip is-on"></i><i class="ring-pip is-on"></i><i class="ring-pip is-on"></i></span><span class="ring-strip__n" id="ring-beatnote">Heard just now</span></div>
+        <div class="ring-strip"><span class="ring-strip__l">Buzz pattern</span><span class="ring-pat" id="ring-pat" aria-hidden="true"><i class="ring-bar ring-bar--r"></i><i class="ring-bar ring-bar--a1"></i><i class="ring-bar ring-bar--a2"></i><i class="ring-bar ring-bar--a3"></i><b class="ring-head-line"></b></span><span class="ring-strip__n" id="ring-patnote">None playing</span></div>
+      </div>
+      <figcaption class="plate__caption"><span class="plate__fig">Fig. 2</span> Illustration. The link and the alerts are simulated.</figcaption>
+    </figure>
+  </div>
+</section>

@@ -1,0 +1,28 @@
+# --- dependencies ---
+node_modules/
+
+# --- build helpers, test output and scratch work (the site itself is index.html) ---
+alkyone-build/shots/
+alkyone-build/dev/
+alkyone-build/dist/
+alkyone-build/smoke.html
+alkyone-build/spike-A/
+alkyone-build/spike-B/
+alkyone-build/w2a-sections.js
+alkyone-build/w2b-3d-sections.js
+alkyone-build/w3-integrate-qa.js
+alkyone-build/harness/node_modules/
+
+# --- tool and editor files ---
+.claude/
+.agents/
+skills-lock.json
+.vscode/
+.idea/
+
+# --- OS and logs ---
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+*.tmp

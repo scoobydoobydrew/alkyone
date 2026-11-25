@@ -1,0 +1,98 @@
+#ring .ring-panel { display: grid; gap: var(--s-4); align-content: start; max-width: 36rem; }
+#ring .ring-seg { margin: 0; min-width: 0; display: inline-grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border: var(--hair) solid var(--line-strong); border-radius: var(--r-pill); background: var(--surface-2); justify-self: start; max-width: 100%; position: relative; }
+#ring .ring-seg legend { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; padding: 0; }
+#ring .ring-seg__opt { position: relative; display: block; }
+#ring .ring-seg__opt input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; z-index: 1; }
+#ring .ring-seg__opt span { display: grid; place-items: center; min-height: 44px; padding: 0 1.1rem; border-radius: var(--r-pill); font: 600 .9rem/1.1 var(--font-body); color: var(--fg-muted); text-align: center; transition: background var(--dur-2) var(--ease-out), color var(--dur-2) var(--ease-out); }
+#ring .ring-seg__opt input:checked + span { background: var(--accent); color: var(--accent-ink); }
+#ring .ring-seg__opt input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+#ring .ring-btns { display: flex; flex-wrap: wrap; gap: var(--s-3); }
+#ring .ring-btns .btn { white-space: normal; }
+#ring .ring-status { display: grid; grid-template-columns: auto 1fr; gap: .7rem; align-items: start; margin: 0; padding: var(--s-4); min-height: 4.4rem; border: var(--hair) solid var(--line); border-radius: var(--r-3); background: var(--surface-2); font-size: 1rem; line-height: 1.45; }
+#ring .ring-status__dot { width: 10px; height: 10px; margin-top: .45em; border-radius: 50%; background: var(--accent); }
+#ring[data-ringstate="attention"] .ring-status__dot, #ring[data-ringstate="alertlost"] .ring-status__dot { background: var(--warm); animation: ring-blink 1.2s ease-in-out infinite; }
+#ring[data-ringstate="lost"] .ring-status__dot, #ring[data-ringstate="lostacked"] .ring-status__dot { background: var(--fg-muted); }
+#ring .ring-hint { margin: 0; font-size: .9375rem; color: var(--fg-muted); }
+#ring .ring-note { margin: 0; max-width: 46ch; }
+
+/* stage */
+#ring .ring-plate, #ring .ring-stage { --plate-ar: 5 / 7; }
+#ring .ring-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
+#ring .ring-link { stroke: var(--accent); stroke-width: 2.4; stroke-linecap: round; stroke-dasharray: 2 9; opacity: .8; animation: ring-flow 1.6s linear infinite; transition: stroke var(--dur-3) var(--ease-out), opacity var(--dur-3); }
+#ring[data-ringstate="lost"] .ring-link, #ring[data-ringstate="alertlost"] .ring-link, #ring[data-ringstate="lostacked"] .ring-link { stroke: var(--fg-muted); stroke-dasharray: 10 12; opacity: .55; animation: none; }
+#ring .ring-pulse { fill: var(--warm); filter: drop-shadow(0 0 6px var(--warm)); }
+#ring[data-ringstate="idle"] .ring-pulse, #ring[data-ringstate="ack"] .ring-pulse { fill: var(--accent); filter: drop-shadow(0 0 5px var(--accent)); }
+#ring .ring-halo { fill: var(--accent); opacity: 0; transition: opacity var(--dur-3) var(--ease-out); }
+#ring .ring-halo.is-lit { opacity: .22; }
+#ring .ring-halo.is-warm { fill: var(--warm); opacity: .3; }
+#ring .ring-patch__body { fill: var(--bg); stroke: var(--accent); stroke-width: 2.2; }
+#ring .ring-patch__core { fill: var(--warm-300); stroke: var(--warm); stroke-width: 1.2; }
+#ring .ring-patch__dot { fill: var(--warm-600); }
+#ring .ring-band { fill: none; stroke: var(--accent); stroke-width: 5.5; transition: stroke var(--dur-2) var(--ease-out); }
+#ring .ring-band--in { stroke: color-mix(in srgb, var(--accent) 35%, #fff); stroke-width: 1.4; }
+#ring[data-ringstate="attention"] .ring-band, #ring[data-ringstate="alertlost"] .ring-band { stroke: var(--warm); }
+#ring[data-ringstate="lost"] .ring-band, #ring[data-ringstate="lostacked"] .ring-band { stroke: var(--fg-muted); }
+#ring .ring-shake { transform-box: fill-box; transform-origin: center; }
+#ring .ring-stage.is-buzz .ring-shake { animation: ring-shake .34s linear 3 both; }
+#ring .ring-stage.is-soft .ring-shake { animation: ring-shake-soft .4s ease-out 1 both; }
+#ring .ring-ripple { fill: none; stroke: var(--warm); stroke-width: 2; opacity: 0; transform-box: fill-box; transform-origin: center; }
+#ring .ring-stage.is-buzz .ring-ripple { animation: ring-ripple 1.1s ease-out 2 both; }
+#ring .ring-stage.is-buzz .ring-ripple--2 { animation-delay: .2s; }
+#ring .ring-stage.is-buzz .ring-ripple--3 { animation-delay: .4s; }
+#ring .ring-stage.is-soft .ring-ripple { stroke: var(--accent); }
+#ring .ring-stage.is-soft .ring-ripple:first-of-type { animation: ring-ripple 1s ease-out 1 both; }
+#ring .ring-ringbtn { position: absolute; left: 50%; top: 50%; width: 64px; height: 64px; margin: -32px 0 0 -32px; padding: 0; border: 0; border-radius: 50%; background: transparent; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+#ring .ring-ringbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+#ring .ring-ringbtn__ring { display: block; width: 100%; height: 100%; border-radius: 50%; border: 1.5px dashed var(--accent); opacity: 0; transition: opacity var(--dur-2); }
+#ring[data-ringstate="attention"] .ring-ringbtn__ring, #ring[data-ringstate="alertlost"] .ring-ringbtn__ring { opacity: .8; border-color: var(--warm); }
+@media (hover: hover) { #ring .ring-ringbtn:hover .ring-ringbtn__ring { opacity: .6; } }
+
+/* strips */
+#ring .ring-strips { display: grid; gap: .55rem; padding: var(--s-3) var(--s-4) 0; }
+#ring .ring-strip { display: grid; grid-template-columns: 6.2rem minmax(0, 1fr) auto; align-items: center; gap: .75rem; font-size: .8125rem; color: var(--fg-muted); min-height: 24px; }
+#ring .ring-strip__l { font-weight: 600; letter-spacing: .02em; }
+#ring .ring-strip__n { min-width: 6.4rem; text-align: right; }
+#ring .ring-pips { display: flex; gap: 8px; }
+#ring .ring-pip { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--accent); background: transparent; transition: background var(--dur-2); }
+#ring .ring-pip.is-on { background: var(--accent); }
+#ring .ring-pat { position: relative; height: 18px; border-radius: 9px; background: var(--surface-2); border: var(--hair) solid var(--line); overflow: hidden; }
+#ring .ring-bar { position: absolute; top: 3px; bottom: 3px; border-radius: 6px; background: var(--line-strong); opacity: 0; transition: opacity var(--dur-2), background var(--dur-1); }
+#ring .ring-bar--r { left: 0; width: 5%; }
+#ring .ring-bar--a1 { left: 0; width: 14.7%; }
+#ring .ring-bar--a2 { left: 20.6%; width: 14.7%; }
+#ring .ring-bar--a3 { left: 41.2%; width: 14.7%; }
+#ring .ring-pat[data-k="routine"] .ring-bar--r, #ring .ring-pat[data-k="attention"] .ring-bar--a1, #ring .ring-pat[data-k="attention"] .ring-bar--a2, #ring .ring-pat[data-k="attention"] .ring-bar--a3 { opacity: 1; }
+#ring .ring-bar.is-on { background: var(--warm); }
+#ring .ring-pat[data-k="routine"] .ring-bar.is-on { background: var(--accent); }
+#ring .ring-head-line { position: absolute; top: 0; bottom: 0; left: 0; width: 2px; background: var(--fg); opacity: 0; }
+#ring .ring-pat.is-run .ring-head-line { opacity: .7; animation: ring-play 2.72s linear infinite; }
+#ring .ring-pat.is-run[data-k="routine"] .ring-head-line { animation: ring-play 2.72s linear 1; }
+
+@media (max-width: 959px) {
+  #ring .ring-plate { order: 2; }
+  #ring .ring-panel { order: 3; }
+}
+@media (max-width: 699px) {
+  #ring .ring-strip { grid-template-columns: 5.2rem minmax(0, 1fr); }
+  #ring .ring-strip__n { grid-column: 1 / -1; text-align: left; margin-top: -.25rem; }
+}
+@media (min-width: 700px) {
+  #ring .ring-plate, #ring .ring-stage { --plate-ar: 9 / 5.6; }
+}
+@media (min-width: 960px) {
+  #ring .ring-grid { row-gap: var(--s-6); align-items: center; }
+  #ring .ring-head { grid-column: 1 / span 5; grid-row: 1; align-self: end; }
+  #ring .ring-panel { grid-column: 1 / span 5; grid-row: 2; align-self: start; }
+  #ring .ring-plate { grid-column: 6 / -1; grid-row: 1 / span 2; }
+}
+
+@keyframes ring-flow { to { stroke-dashoffset: -22; } }
+@keyframes ring-blink { 50% { opacity: .35; } }
+@keyframes ring-shake { 0%, 100% { transform: translate(0, 0); } 20% { transform: translate(-3px, 1px); } 40% { transform: translate(3px, -1px); } 60% { transform: translate(-2px, -1px); } 80% { transform: translate(2px, 1px); } }
+@keyframes ring-shake-soft { 0%, 100% { transform: translate(0, 0); } 40% { transform: translate(1.5px, 0); } 70% { transform: translate(-1px, 0); } }
+@keyframes ring-ripple { 0% { opacity: .75; transform: scale(.8); } 100% { opacity: 0; transform: scale(3.2); } }
+@keyframes ring-play { from { left: 0; } to { left: 100%; } }
+
+@media (prefers-reduced-motion: reduce) {
+  #ring .ring-link, #ring .ring-shake, #ring .ring-ripple, #ring .ring-status__dot, #ring .ring-head-line { animation: none !important; }
+}

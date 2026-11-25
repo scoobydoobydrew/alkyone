@@ -1,0 +1,37 @@
+{
+  "viewBox": [
+    800,
+    1000
+  ],
+  "note": "Fractions (0..1) of the patch-fallback viewBox. x,y = anchor centre; rx,ry = suggested ring radii.",
+  "optical": {
+    "x": 0.3125,
+    "y": 0.488,
+    "rx": 0.1388,
+    "ry": 0.111
+  },
+  "temp": {
+    "x": 0.5075,
+    "y": 0.599,
+    "rx": 0.0675,
+    "ry": 0.054
+  },
+  "imu": {
+    "x": 0.695,
+    "y": 0.488,
+    "rx": 0.1275,
+    "ry": 0.093
+  },
+  "mic": {
+    "x": 0.5075,
+    "y": 0.371,
+    "rx": 0.0675,
+    "ry": 0.054
+  },
+  "wear": {
+    "x": 0.5,
+    "y": 0.68,
+    "rx": 0.3,
+    "ry": 0.054
+  }
+}

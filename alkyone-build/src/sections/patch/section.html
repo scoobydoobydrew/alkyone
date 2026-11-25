@@ -1,0 +1,73 @@
+<section id="patch" class="sec" data-theme="night" aria-labelledby="patch-title">
+  <div class="patch-sky" aria-hidden="true"></div>
+  <div class="container sec__grid patch-grid">
+    <div class="sec__head patch-head">
+      <p class="eyebrow" data-reveal><span class="eyebrow__num">2</span> <span class="eyebrow__text">The patch</span></p>
+      <h2 class="h2" id="patch-title" data-reveal="lines">A small patch that notices.</h2>
+      <p class="lede" data-reveal data-reveal-delay="1">It sits on the chest. Tap a dot to see what each part does.</p>
+    </div>
+
+    <figure class="plate plate--square sec__visual patch-plate" data-reveal>
+      <div class="plate__stage patch-stage" id="patch-stage" tabindex="0" role="group" aria-roledescription="3D viewer" aria-label="The patch, shown large" aria-describedby="patch-desc patch-help">
+        <div class="patch-glow"></div>
+        <div class="patch-fig" id="patch-fig">
+          <div class="patch-svgwrap">
+            <!--@include ../shared/gen/patch-fallback.svg.html-->
+          </div>
+        </div>
+        <div class="patch-vignette"></div>
+        <div class="patch-hots" aria-hidden="true">
+          <button type="button" class="patch-hot" data-id="optical" tabindex="-1" aria-pressed="false"><span class="patch-hot__ring"></span><span class="patch-hot__lead"></span><span class="patch-hot__dot">1</span><span class="patch-hot__label">Heart rate and SpO<sub>2</sub></span></button>
+          <button type="button" class="patch-hot" data-id="temp" tabindex="-1" aria-pressed="false"><span class="patch-hot__ring"></span><span class="patch-hot__lead"></span><span class="patch-hot__dot">2</span><span class="patch-hot__label">Skin temperature</span></button>
+          <button type="button" class="patch-hot" data-id="imu" tabindex="-1" aria-pressed="false"><span class="patch-hot__ring"></span><span class="patch-hot__lead"></span><span class="patch-hot__dot">3</span><span class="patch-hot__label">Motion and position</span></button>
+          <button type="button" class="patch-hot" data-id="mic" tabindex="-1" aria-pressed="false"><span class="patch-hot__ring"></span><span class="patch-hot__lead"></span><span class="patch-hot__dot">4</span><span class="patch-hot__label">Microphone</span></button>
+          <button type="button" class="patch-hot" data-id="wear" tabindex="-1" aria-pressed="false"><span class="patch-hot__ring"></span><span class="patch-hot__lead"></span><span class="patch-hot__dot">5</span><span class="patch-hot__label">Wear detection</span></button>
+        </div>
+      </div>
+
+      <div class="patch-tools" role="group" aria-label="Viewer controls">
+        <span class="patch-tools__g patch-tools__g--turn">
+          <button type="button" class="patch-tool" data-act="left" aria-label="Turn left" title="Turn left"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 6.5 9 12l5.5 5.5"/></svg></button>
+          <button type="button" class="patch-tool" data-act="right" aria-label="Turn right" title="Turn right"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.5 6.5 15 12l-5.5 5.5"/></svg></button>
+          <button type="button" class="patch-tool patch-tool--sep" data-act="up" aria-label="Tilt up" title="Tilt up"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.5 14.5 12 9l5.5 5.5"/></svg></button>
+          <button type="button" class="patch-tool" data-act="down" aria-label="Tilt down" title="Tilt down"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.5 9.5 12 15l5.5-5.5"/></svg></button>
+        </span>
+        <span class="patch-tools__g">
+          <button type="button" class="patch-tool patch-tool--sep" data-act="out" aria-label="Zoom out" title="Zoom out"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.5 12h11"/></svg></button>
+          <button type="button" class="patch-tool" data-act="in" aria-label="Zoom in" title="Zoom in"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.5 12h11M12 6.5v11"/></svg></button>
+          <button type="button" class="patch-tool patch-tool--sep" data-act="reset" aria-label="Reset view" title="Reset view"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="5.5"/><circle cx="12" cy="12" r="1.3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg></button>
+        </span>
+      </div>
+      <p class="patch-help" id="patch-help"><span class="patch-help__touch">Drag to turn. Pinch to zoom.</span><span class="patch-help__mouse">Drag to turn. Hold Ctrl and scroll to zoom.</span><span class="patch-help__ftouch">Pinch to zoom, then drag to move.</span><span class="patch-help__fmouse">Hold Ctrl and scroll to zoom, then drag to move.</span><span class="sr-only"> With the view focused, the arrow keys turn it, plus and minus zoom, and 0 resets.</span></p>
+      <p class="sr-only" id="patch-desc">An illustration of the patch: a small, rounded pad with five parts. Pick a part from the list below to read what it does.</p>
+
+      <figcaption class="plate__caption"><span class="plate__fig">Fig. 1</span> Illustration, not to scale.</figcaption>
+    </figure>
+
+    <div class="patch-panel">
+      <ul class="patch-list" aria-label="Parts of the patch">
+        <li>
+          <button type="button" class="patch-item" data-id="optical" aria-pressed="false" aria-controls="patch-card"><span class="patch-item__n" aria-hidden="true">1</span><span class="patch-item__t">Heart rate and <span data-term-slot="spo2">SpO<sub>2</sub></span></span></button>
+          <p class="patch-item__text">Light shines on the skin and an <button type="button" class="term" data-term="optical">optical</button> sensor reads the pulse and the oxygen in the blood.</p>
+        </li>
+        <li>
+          <button type="button" class="patch-item" data-id="temp" aria-pressed="false" aria-controls="patch-card"><span class="patch-item__n" aria-hidden="true">2</span><span class="patch-item__t">Skin temperature</span></button>
+          <p class="patch-item__text">A small sensor reads the temperature of the skin under the patch.</p>
+        </li>
+        <li>
+          <button type="button" class="patch-item" data-id="imu" aria-pressed="false" aria-controls="patch-card"><span class="patch-item__n" aria-hidden="true">3</span><span class="patch-item__t">Motion and position</span></button>
+          <p class="patch-item__text">An <button type="button" class="term" data-term="imu">IMU</button> feels movement and tilt, so the patch knows when the baby is still, moving or has turned.</p>
+        </li>
+        <li>
+          <button type="button" class="patch-item" data-id="mic" aria-pressed="false" aria-controls="patch-card"><span class="patch-item__n" aria-hidden="true">4</span><span class="patch-item__t">Microphone</span></button>
+          <p class="patch-item__text">Listens for sound. The sound is <button type="button" class="term" data-term="ondevice">processed on the device</button> itself, and no audio is stored.</p>
+        </li>
+        <li>
+          <button type="button" class="patch-item" data-id="wear" aria-pressed="false" aria-controls="patch-card"><span class="patch-item__n" aria-hidden="true">5</span><span class="patch-item__t">Wear detection</span></button>
+          <p class="patch-item__text">Knows whether the patch is touching skin. If it comes off, that is something to tell you about, not a reason to go quiet.</p>
+        </li>
+      </ul>
+      <div class="patch-card" id="patch-card" aria-live="polite" aria-atomic="true"></div>
+    </div>
+  </div>
+</section>

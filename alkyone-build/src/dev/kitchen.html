@@ -1,0 +1,244 @@
+<!-- Kitchen sink (dev only). Built with: node build.mjs --inject src/dev/kitchen.html --out dev/kitchen.html
+     Five blocks: type specimen (mist), components (mist), then the section skeleton in mist-teal, night and mist.
+     Everything here is foundation markup: copy it, do not restyle it. -->
+
+<!-- ============================================================ 1. TYPE SPECIMEN (mist) -->
+<section id="kitchen-type" class="sec" data-theme="mist" aria-labelledby="kitchen-type-title">
+  <div class="container">
+    <p class="eyebrow" data-reveal><span class="eyebrow__num">0</span><span class="eyebrow__text">Foundation kitchen sink · dev only</span></p>
+    <h1 class="h-display kt-title" id="kitchen-type-title" data-reveal="lines">Designed so the alert <em class="t-warm">actually reaches</em> the parent.</h1>
+    <p class="lede kt-lede" data-reveal data-reveal-delay="2">A soft patch on the baby. A quiet ring on you. Alkyone is a concept built around one question: will the alert get through?</p>
+
+    <div class="kt-spec" data-reveal>
+      <div class="kt-spec__row">
+        <p class="label">Display</p>
+        <div><p class="h-display" id="kt-display">The alert goes to your hand.</p><p class="kt-meta" data-spec="#kt-display"></p></div>
+      </div>
+      <div class="kt-spec__row">
+        <p class="label">Heading 2</p>
+        <div><p class="h2" id="kt-h2">A small patch that <em>notices.</em></p><p class="kt-meta" data-spec="#kt-h2"></p></div>
+      </div>
+      <div class="kt-spec__row">
+        <p class="label">Heading 3</p>
+        <div><p class="h3" id="kt-h3">Heart rate and SpO<sub>2</sub></p><p class="kt-meta" data-spec="#kt-h3"></p></div>
+      </div>
+      <div class="kt-spec__row">
+        <p class="label">Lede</p>
+        <div><p class="lede" id="kt-lede">The ring buzzes in different patterns. One for routine, another for needs attention.</p><p class="kt-meta" data-spec="#kt-lede"></p></div>
+      </div>
+      <div class="kt-spec__row">
+        <p class="label">Body</p>
+        <div><p id="kt-body" class="kt-measure">Light shines on the skin and an optical sensor reads the pulse and the oxygen in the blood. A small sensor reads the temperature of the skin under the patch. Knows whether the patch is touching skin. If it comes off, that is something to tell you about, not a reason to go quiet.</p><p class="kt-meta" data-spec="#kt-body"></p></div>
+      </div>
+      <div class="kt-spec__row">
+        <p class="label">Small and label</p>
+        <div>
+          <p class="small" id="kt-small">Fig. 1 — Illustration, not to scale.</p>
+          <p class="label kt-gap" id="kt-label">Simulated data</p>
+          <p class="kt-meta" data-spec="#kt-small"></p><p class="kt-meta" data-spec="#kt-label"></p>
+        </div>
+      </div>
+      <div class="kt-spec__row">
+        <p class="label">Eyebrow</p>
+        <div class="kt-stack">
+          <p class="eyebrow"><span class="eyebrow__num">1</span><span class="eyebrow__text">The patch</span></p>
+          <p class="eyebrow"><span class="eyebrow__num">4</span><span class="eyebrow__text">Sleep position · exploratory</span></p>
+          <p class="eyebrow">Infant monitoring · concept</p>
+        </div>
+      </div>
+      <div class="kt-spec__row">
+        <p class="label">Numerals</p>
+        <div class="kt-numerals">
+          <div><p class="num kt-bignum" id="kt-num">0123456789</p><p class="kt-meta">.num · Instrument Serif lining figures. Proportional: it has no tabular alternate.</p></div>
+          <div><p class="tnum kt-tabnum" id="kt-tab">1111<br>0000</p><p class="kt-meta">.tnum · Figtree tabular figures, for numbers that tick in place.</p></div>
+        </div>
+      </div>
+      <div class="kt-spec__row">
+        <p class="label">Glyphs</p>
+        <div class="kt-stack">
+          <p class="serif kt-glyphs" id="kt-glyphs">Aa Gg Qq 1234567890 – — · “quotes” ‘single’ … ° × − &amp; @ # % /</p>
+          <p class="serif kt-glyphs"><em>Aa Gg Qq 1234567890 – — · “quotes” ‘single’ … ° × − &amp; @ # % /</em></p>
+          <p class="kt-glyphs kt-sans">Aa Gg Qq 1234567890 – — · “quotes” ‘single’ … ° × − &amp; @ # % / SpO<sub>2</sub></p>
+          <p class="kt-meta">Instrument Serif roman and italic, Figtree. Not in the latin subset: ⌘ ≈ ≤ ≥ ∈ (avoid them).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 2. COMPONENTS (mist) -->
+<section id="kitchen-ui" class="sec" data-theme="mist" data-p aria-labelledby="kitchen-ui-title">
+  <div class="container kt-wrap">
+    <header class="kt-head">
+      <p class="eyebrow" data-reveal><span class="eyebrow__num">0</span><span class="eyebrow__text">Components</span></p>
+      <h2 class="h2" id="kitchen-ui-title" data-reveal data-reveal-delay="1">Parts, in every <em>state.</em></h2>
+    </header>
+
+    <div class="kt-grid">
+      <div class="kt-block" data-reveal>
+        <p class="label">Buttons</p>
+        <div class="kt-row">
+          <button class="btn btn--primary" type="button" id="kt-btn-primary"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l10-6.5z"/></svg>Simulate event</button>
+          <button class="btn btn--ghost" type="button" id="kt-btn-ghost">Simulate lost signal</button>
+        </div>
+        <div class="kt-row">
+          <button class="btn btn--primary btn--sm" type="button">Add</button>
+          <button class="btn btn--ghost btn--sm" type="button">Cancel</button>
+          <button class="btn btn--ghost btn--icon" type="button" aria-label="Zoom in"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="btn btn--ghost btn--icon" type="button" aria-label="Zoom out"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg></button>
+          <button class="btn btn--ghost btn--icon" type="button" aria-label="Reset view"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12a8 8 0 1 1-2.6-5.9M20 4v4.5h-4.5"/></svg></button>
+        </div>
+        <div class="kt-row">
+          <button class="btn btn--primary" type="button" disabled>Disabled</button>
+          <button class="btn btn--ghost" type="button" aria-disabled="true">Disabled</button>
+        </div>
+        <p class="kt-meta">Hover, focus (Tab) and press (scale .97) on the real controls. Targets are at least 44px.</p>
+      </div>
+
+      <div class="kt-block" data-reveal data-reveal-delay="1">
+        <p class="label">Chips and tags</p>
+        <div class="kt-row">
+          <span class="chip">Heart rate</span>
+          <span class="chip">Skin temperature</span>
+          <button class="chip" type="button" aria-expanded="false">Second-caregiver escalation</button>
+          <button class="chip" type="button" aria-expanded="true">Personal baselines</button>
+          <a class="chip" href="#kitchen-ui">Link chip</a>
+        </div>
+        <div class="kt-row">
+          <span class="sim-tag"></span>
+          <span class="exp-tag"></span>
+          <span class="sim-tag">Simulated data · 02:14</span>
+          <span class="placeholder">Placeholder</span>
+        </div>
+        <p class="kt-meta">.sim-tag and .exp-tag write their own label when empty.</p>
+      </div>
+
+      <div class="kt-block kt-block--wide" data-reveal>
+        <p class="label">Glossary terms</p>
+        <p class="kt-measure">The patch talks to the ring over <button class="term" type="button" data-term="ble">BLE</button>. An <button class="term" type="button" data-term="imu">IMU</button> feels movement and tilt. Light shines on the skin, so it is <button class="term" type="button" data-term="optical">optical</button>, and it estimates <button class="term" type="button" data-term="spo2">SpO<sub>2</sub></button>. Silence is treated as an alert, because the <button class="term" type="button" data-term="heartbeat">heartbeat</button> stopped.</p>
+        <p class="kt-meta">Hover (mouse), focus (Tab), tap or press Enter. Escape or a tap elsewhere closes. It flips and clamps inside the viewport.</p>
+        <p class="kt-row kt-row--tight">
+          <button class="term" type="button" data-term="ece">ECE</button> ·
+          <button class="term" type="button" data-term="fusion">sensor fusion</button> ·
+          <button class="term" type="button" data-term="ml">machine learning</button> ·
+          <button class="term" type="button" data-term="baseline">baseline</button> ·
+          <button class="term" type="button" data-term="flex">flexible circuit</button> ·
+          <button class="term" type="button" data-term="ondevice">on the device</button> ·
+          <button class="term" type="button" data-term="escalation">escalation</button> ·
+          <button class="term" type="button" data-term="maintenance">predictive maintenance</button> ·
+          <button class="term" type="button" data-term="staging">sleep staging</button>
+        </p>
+      </div>
+    </div>
+
+    <div class="kt-grid kt-grid--cols">
+      <div class="kt-col" data-reveal data-reveal-delay="1"><p class="label">Reveal 1</p><p class="kt-measure">Fades and rises 16px. Stagger is 75ms per step.</p></div>
+      <div class="kt-col" data-reveal data-reveal-delay="2"><p class="label">Reveal 2</p><p class="kt-measure">data-reveal-delay takes 1 to 6.</p></div>
+      <div class="kt-col" data-reveal data-reveal-delay="3"><p class="label">Reveal 3</p><p class="kt-measure">Visible without JS and under reduced motion.</p></div>
+    </div>
+
+    <div class="kt-block kt-block--wide" data-reveal>
+      <p class="label">Tokens</p>
+      <div class="kt-sw" id="kt-swatches">
+        <div><i style="background:var(--mist-50)"></i><span>mist-50</span></div><div><i style="background:var(--mist-100)"></i><span>mist-100</span></div><div><i style="background:var(--mist-200)"></i><span>mist-200</span></div><div><i style="background:var(--mist-300)"></i><span>mist-300</span></div>
+        <div><i style="background:var(--tmist-100)"></i><span>tmist-100</span></div><div><i style="background:var(--tmist-200)"></i><span>tmist-200</span></div>
+        <div><i style="background:var(--ink-900)"></i><span>ink-900</span></div><div><i style="background:var(--ink-800)"></i><span>ink-800</span></div><div><i style="background:var(--ink-700)"></i><span>ink-700</span></div><div><i style="background:var(--ink-600)"></i><span>ink-600</span></div>
+        <div><i style="background:var(--night-950)"></i><span>night-950</span></div><div><i style="background:var(--night-900)"></i><span>night-900</span></div><div><i style="background:var(--night-800)"></i><span>night-800</span></div><div><i style="background:var(--night-700)"></i><span>night-700</span></div><div><i style="background:var(--night-600)"></i><span>night-600</span></div>
+        <div><i style="background:var(--moon-50)"></i><span>moon-50</span></div><div><i style="background:var(--moon-200)"></i><span>moon-200</span></div>
+        <div><i style="background:var(--teal-300)"></i><span>teal-300</span></div><div><i style="background:var(--teal-400)"></i><span>teal-400</span></div><div><i style="background:var(--teal-500)"></i><span>teal-500</span></div><div><i style="background:var(--teal-600)"></i><span>teal-600</span></div><div><i style="background:var(--teal-700)"></i><span>teal-700</span></div><div><i style="background:var(--teal-800)"></i><span>teal-800</span></div>
+        <div><i style="background:var(--blue-300)"></i><span>blue-300</span></div><div><i style="background:var(--blue-400)"></i><span>blue-400</span></div><div><i style="background:var(--blue-500)"></i><span>blue-500</span></div><div><i style="background:var(--blue-600)"></i><span>blue-600</span></div>
+        <div><i style="background:var(--warm-200)"></i><span>warm-200</span></div><div><i style="background:var(--warm-300)"></i><span>warm-300</span></div><div><i style="background:var(--warm-400)"></i><span>warm-400</span></div><div><i style="background:var(--warm-500)"></i><span>warm-500</span></div><div><i style="background:var(--warm-600)"></i><span>warm-600</span></div><div><i style="background:var(--warm-700)"></i><span>warm-700</span></div><div><i style="background:var(--warm-800)"></i><span>warm-800</span></div>
+      </div>
+    </div>
+
+    <div class="kt-block kt-block--wide" data-reveal>
+      <p class="label">Runtime</p>
+      <dl class="kt-mon" id="kt-mon">
+        <div><dt>Alkyone.reduced</dt><dd data-mon="reduced">-</dd></div>
+        <div><dt>Alkyone.lowPower</dt><dd data-mon="lowPower">-</dd></div>
+        <div><dt>html[data-nav]</dt><dd data-mon="nav">-</dd></div>
+        <div><dt>rail star</dt><dd data-mon="rail">-</dd></div>
+        <div><dt>visible blocks</dt><dd data-mon="visible">-</dd></div>
+        <div><dt>--p of this block</dt><dd data-mon="p">-</dd></div>
+        <div><dt>kitchen-night</dt><dd data-mon="night">-</dd></div>
+      </dl>
+      <div class="kt-row">
+        <button class="btn btn--ghost btn--sm" type="button" id="kt-announce">Announce</button>
+        <button class="btn btn--ghost btn--sm" type="button" id="kt-three">loadThree()</button>
+        <span class="kt-meta" id="kt-three-out" role="status"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 3. SKELETON, flipped, mist-teal -->
+<section id="kitchen-teal" class="sec sec--flip" data-theme="mist-teal" aria-labelledby="kitchen-teal-title">
+  <div class="container sec__grid">
+    <header class="sec__head">
+      <p class="eyebrow" data-reveal><span class="eyebrow__num">3</span><span class="eyebrow__text">The app</span></p>
+      <h2 class="h2" id="kitchen-teal-title" data-reveal data-reveal-delay="1">Everything in one calm place.</h2>
+      <p class="lede" data-reveal data-reveal-delay="2">Swipe through four screens. Add your own notes and watch them land on the timeline beside the sensor data.</p>
+      <div class="kt-row" data-reveal data-reveal-delay="3">
+        <button class="btn btn--primary" type="button">Add a note</button>
+        <button class="btn btn--ghost" type="button">Reset demo</button>
+      </div>
+      <p class="small" data-reveal data-reveal-delay="4">Spotting that the electronics are wearing down, such as a weak battery, is <button class="term" type="button" data-term="maintenance">predictive maintenance</button>.</p>
+    </header>
+    <div class="sec__visual">
+      <figure class="plate" data-reveal data-reveal-delay="2">
+        <div class="plate__stage kt-stage" data-kt-stage>
+          <div class="plate__badges"><span class="sim-tag"></span></div>
+        </div>
+        <figcaption class="plate__caption"><span class="plate__fig">Fig. 3</span> All values and entries are simulated.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 4. SKELETON, night -->
+<section id="kitchen-night" class="sec" data-theme="night" data-p aria-labelledby="kitchen-night-title">
+  <div class="container sec__grid">
+    <header class="sec__head">
+      <p class="eyebrow" data-reveal><span class="eyebrow__num">1</span><span class="eyebrow__text">The patch</span></p>
+      <h2 class="h2" id="kitchen-night-title" data-reveal data-reveal-delay="1">A small patch that notices.</h2>
+      <p class="lede" data-reveal data-reveal-delay="2">It sits on the chest. Tap a dot to see what each part does.</p>
+      <div class="kt-row" data-reveal data-reveal-delay="3">
+        <button class="btn btn--primary" type="button">Heart rate and SpO<sub>2</sub></button>
+        <button class="btn btn--ghost" type="button">Skin temperature</button>
+      </div>
+      <p class="small" data-reveal data-reveal-delay="4">An <button class="term" type="button" data-term="imu">IMU</button> feels movement and tilt. The sound stays <button class="term" type="button" data-term="ondevice">on the device</button>.</p>
+    </header>
+    <div class="sec__visual">
+      <figure class="plate" data-reveal data-reveal-delay="2">
+        <div class="plate__stage kt-stage" data-kt-stage>
+          <div class="plate__badges"><span class="exp-tag"></span><span class="sim-tag"></span></div>
+        </div>
+        <figcaption class="plate__caption"><span class="plate__fig">Fig. 1</span> Illustration, not to scale.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 5. SKELETON, mist -->
+<section id="kitchen-mist" class="sec" data-theme="mist" aria-labelledby="kitchen-mist-title">
+  <div class="container sec__grid">
+    <header class="sec__head">
+      <p class="eyebrow" data-reveal><span class="eyebrow__num">2</span><span class="eyebrow__text">The ring</span></p>
+      <h2 class="h2" id="kitchen-mist-title" data-reveal data-reveal-delay="1">The alert goes to your hand.</h2>
+      <p class="lede" data-reveal data-reveal-delay="2">The ring buzzes in different patterns. One for routine, another for needs attention.</p>
+      <div class="kt-row" data-reveal data-reveal-delay="3">
+        <button class="btn btn--primary" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l10-6.5z"/></svg>Simulate event</button>
+        <button class="btn btn--ghost" type="button">Simulate lost signal</button>
+      </div>
+      <p class="small" data-reveal data-reveal-delay="4">Linked over <button class="term" type="button" data-term="ble">BLE</button>. The patch sends a steady <button class="term" type="button" data-term="heartbeat">heartbeat</button>.</p>
+    </header>
+    <div class="sec__visual">
+      <figure class="plate" data-reveal data-reveal-delay="2">
+        <div class="plate__stage kt-stage" data-kt-stage>
+          <div class="plate__badges"><span class="sim-tag"></span></div>
+        </div>
+        <figcaption class="plate__caption"><span class="plate__fig">Fig. 2</span> Illustration. The link and the alerts are simulated.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>

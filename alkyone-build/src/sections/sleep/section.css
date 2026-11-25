@@ -1,0 +1,163 @@
+/* sleep: simulated night replay. Night theme. Warm accent only on the patch (canvas) and the playhead. */
+
+#sleep {
+  --sleep-thumb: 26px;
+  --sleep-pad: clamp(16px, 4.4vw, 26px);
+  --sleep-ribbon-h: 34px;
+}
+
+/* ---- head notes ------------------------------------------------------------------------------ */
+#sleep .sleep-notes {
+  display: grid;
+  gap: var(--s-3);
+  margin-top: var(--s-3);
+  padding-top: var(--s-5);
+  border-top: var(--hair) solid var(--line);
+  max-width: 34rem;
+}
+#sleep .sleep-notes p { margin: 0; }
+#sleep .sleep-notes__flow {
+  font: italic 400 clamp(1.35rem, 1.1rem + 1vw, 1.75rem)/1.15 var(--font-display);
+  color: var(--accent);
+  letter-spacing: 0;
+}
+#sleep .sleep-notes__limit,
+#sleep .sleep-notes__line { font-size: var(--fs-body); line-height: 1.55; color: var(--fg-muted); text-wrap: pretty; }
+#sleep .sleep-notes__line { color: var(--fg); }
+
+/* ---- plate ----------------------------------------------------------------------------------- */
+#sleep .sleep-plate { --plate-ar: 5 / 4; }
+#sleep .sleep-defs { position: absolute; width: 0; height: 0; overflow: hidden; pointer-events: none; }
+#sleep .sleep-view { position: relative; }
+#sleep .sleep-stage { --plate-ar: 1.18 / 1; background-color: color-mix(in srgb, var(--night-950) 70%, var(--bg)); overflow: hidden; }
+#sleep .sleep-stage::before { z-index: 1; opacity: .55; }
+#sleep .sleep-stars { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+#sleep .sleep-stars circle, #sleep .sleep-stars path { fill: var(--moon-50); }
+#sleep .sleep-glow {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(52% 44% at 46% 66%, color-mix(in srgb, var(--teal-600) 34%, transparent), transparent 72%),
+    radial-gradient(38% 34% at 80% 18%, color-mix(in srgb, var(--blue-500) 20%, transparent), transparent 74%);
+}
+#sleep .sleep-canvas { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; display: block; }
+#sleep .plate__badges { z-index: 4; }
+
+/* ---- readout: posture label + sensor dial ------------------------------------------------------ */
+#sleep .sleep-readout {
+  position: relative; z-index: 3;
+  display: flex; align-items: center; justify-content: space-between; gap: var(--s-4);
+  padding: 12px var(--sleep-pad) 16px;
+  border-top: var(--hair) solid var(--line);
+}
+#sleep .sleep-pose { display: grid; gap: 6px; min-width: 0; }
+#sleep .sleep-pose__kicker { font: 600 var(--fs-label)/1.2 var(--font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--fg-muted); }
+#sleep .sleep-pose__label { font: 400 clamp(2rem, 1.5rem + 2vw, 2.7rem)/1 var(--font-display); letter-spacing: -.01em; color: var(--fg); }
+
+#sleep .sleep-dial { display: flex; align-items: center; gap: var(--s-3); flex-direction: row-reverse; }
+#sleep .sleep-dial__svg { display: block; width: 88px; height: 88px; flex: none; overflow: visible; }
+#sleep .sleep-dial__text { display: grid; gap: 4px; text-align: right; }
+#sleep .sleep-dial__kicker { font: 600 var(--fs-label)/1.25 var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--fg-muted); max-width: 11ch; margin-left: auto; }
+#sleep .sleep-dial__angle { font: 400 1.0625rem/1 var(--font-body); color: var(--fg-muted); white-space: nowrap; }
+#sleep .sleep-dial__num { font: 400 clamp(1.9rem, 1.5rem + 1.6vw, 2.4rem)/1 var(--font-display); color: var(--fg); font-variant-numeric: tabular-nums; font-family: var(--font-body); font-weight: 500; letter-spacing: -.02em; }
+#sleep .sleep-dial__deg { font: 400 1.5rem/1 var(--font-body); color: var(--fg); }
+#sleep .sleep-dial__word { font-size: .875rem; }
+
+#sleep .sleep-dial__face { fill: color-mix(in srgb, var(--night-950) 55%, transparent); }
+#sleep .sleep-dial__ring { fill: none; stroke: var(--line-strong); stroke-width: .8; }
+#sleep .sleep-dial__arc { fill: none; stroke-width: 7; stroke-linecap: butt; opacity: .45; transition: opacity var(--dur-2) var(--ease-out); }
+#sleep .sleep-dial__arc--back { stroke: url(#sleep-pat-back); }
+#sleep .sleep-dial__arc--side { stroke: url(#sleep-pat-side); }
+#sleep .sleep-dial__arc--tummy { stroke: url(#sleep-pat-tummy); }
+#sleep .sleep-dial[data-pose="back"] .sleep-dial__arc--back,
+#sleep .sleep-dial[data-pose="side"] .sleep-dial__arc--side,
+#sleep .sleep-dial[data-pose="tummy"] .sleep-dial__arc--tummy { opacity: 1; }
+#sleep .sleep-dial__body { fill: var(--night-700); stroke: var(--moon-200); stroke-opacity: .55; stroke-width: 1; }
+#sleep .sleep-dial__patchdot { fill: var(--warm); }
+#sleep .sleep-dial__arrow line { stroke: var(--moon-50); stroke-width: 2.4; stroke-linecap: round; }
+#sleep .sleep-dial__arrow path { fill: var(--moon-50); stroke: var(--moon-50); stroke-width: 1.2; stroke-linejoin: round; }
+#sleep .sleep-dial__hub { fill: var(--moon-50); }
+
+/* patterns (shared by ribbon, legend, dial) */
+#sleep .sleep-pat__back { fill: var(--teal-400); }
+#sleep .sleep-pat__side { fill: var(--blue-300); }
+#sleep .sleep-pat__side-line { fill: var(--night-700); }
+#sleep .sleep-pat__tummy { fill: var(--night-600); }
+#sleep .sleep-pat__tummy-dot { fill: var(--moon-50); }
+
+/* ---- controls -------------------------------------------------------------------------------- */
+#sleep .sleep-controls { padding: var(--s-4) var(--sleep-pad) var(--s-5); border-top: var(--hair) solid var(--line); display: grid; gap: var(--s-3); }
+#sleep .sleep-controls__row { display: flex; align-items: center; gap: var(--s-4); }
+#sleep .sleep-play { min-width: 7.2rem; }
+#sleep .sleep-play .sleep-play__i { fill: currentColor; stroke: currentColor; stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; width: 1em; height: 1em; margin-right: .55em; vertical-align: -.12em; }
+#sleep .sleep-play .sleep-play__i--pause { display: none; fill: none; stroke-width: 2; }
+#sleep .sleep-play[data-state="playing"] .sleep-play__i--play { display: none; }
+#sleep .sleep-play[data-state="playing"] .sleep-play__i--pause { display: inline-block; }
+#sleep .sleep-time { margin: 0; display: grid; gap: 2px; min-width: 0; }
+#sleep .sleep-time__kicker { font: 600 var(--fs-label)/1.2 var(--font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--fg-muted); }
+#sleep .sleep-time__val { font: 500 1.5rem/1.1 var(--font-body); letter-spacing: -.01em; color: var(--fg); font-variant-numeric: tabular-nums; }
+
+#sleep .sleep-track { position: relative; --sleep-f: .0556; }
+#sleep .sleep-ribbon { position: absolute; z-index: 0; left: calc(var(--sleep-thumb) / 2); top: calc((44px - var(--sleep-ribbon-h)) / 2); width: calc(100% - var(--sleep-thumb)); height: var(--sleep-ribbon-h); display: block; border-radius: 9px; overflow: hidden; }
+#sleep .sleep-ribbon__frame { fill: none; stroke: var(--line-strong); stroke-width: 1; }
+#sleep .sleep-ribbon__cut { stroke: var(--night-900); stroke-opacity: .7; stroke-width: 1; }
+#sleep .sleep-ticks { position: absolute; z-index: 1; left: calc(var(--sleep-thumb) / 2); top: calc((44px - var(--sleep-ribbon-h)) / 2); width: calc(100% - var(--sleep-thumb)); height: var(--sleep-ribbon-h); pointer-events: none; }
+#sleep .sleep-ticks i { position: absolute; top: 0; bottom: 0; left: calc(var(--x) * 100%); width: 1px; background: var(--night-900); opacity: .6; }
+#sleep .sleep-playhead {
+  position: absolute; z-index: 1; top: 0; height: 44px; width: 2px; margin-left: -1px;
+  left: calc(var(--sleep-thumb) / 2 + var(--sleep-f) * (100% - var(--sleep-thumb)));
+  background: var(--warm); border-radius: 2px; pointer-events: none;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--night-950) 55%, transparent);
+}
+#sleep .sleep-range {
+  position: relative; z-index: 2;
+  -webkit-appearance: none; appearance: none;
+  display: block; width: 100%; height: 44px; margin: 0; padding: 0;
+  background: transparent; cursor: pointer; touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
+#sleep .sleep-range:focus { outline: none; }
+#sleep .sleep-range:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 12px; }
+#sleep .sleep-range::-webkit-slider-runnable-track { height: 44px; background: transparent; border: 0; }
+#sleep .sleep-range::-moz-range-track { height: 44px; background: transparent; border: 0; }
+#sleep .sleep-range::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: var(--sleep-thumb); height: var(--sleep-thumb); margin-top: calc((44px - var(--sleep-thumb)) / 2);
+  border-radius: 50%; border: 3px solid var(--night-900); background: var(--warm);
+  box-shadow: 0 0 0 1.5px var(--warm), 0 4px 14px -2px rgb(0 0 0 / .5);
+  transition: transform var(--dur-1) var(--ease-out);
+}
+#sleep .sleep-range::-moz-range-thumb {
+  box-sizing: border-box; width: var(--sleep-thumb); height: var(--sleep-thumb);
+  border-radius: 50%; border: 3px solid var(--night-900); background: var(--warm);
+  box-shadow: 0 0 0 1.5px var(--warm), 0 4px 14px -2px rgb(0 0 0 / .5);
+  transition: transform var(--dur-1) var(--ease-out);
+}
+#sleep .sleep-range:active::-webkit-slider-thumb { transform: scale(1.12); }
+#sleep .sleep-range:active::-moz-range-thumb { transform: scale(1.12); }
+
+#sleep .sleep-axis { position: relative; height: 22px; margin-top: 2px; font-size: var(--fs-label); line-height: 1; color: var(--fg-muted); letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+#sleep .sleep-axis span { position: absolute; top: 4px; left: calc(var(--sleep-thumb) / 2 + var(--x) * (100% - var(--sleep-thumb))); transform: translateX(-50%); white-space: nowrap; }
+#sleep .sleep-axis span:first-child { transform: translateX(calc(var(--sleep-thumb) / -2)); }
+#sleep .sleep-axis span:last-child { transform: translateX(calc(-100% + var(--sleep-thumb) / 2)); }
+
+#sleep .sleep-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-5); font-size: var(--fs-small); color: var(--fg-muted); }
+#sleep .sleep-legend li { display: inline-flex; align-items: center; gap: .55rem; }
+#sleep .sleep-legend svg { width: 28px; height: 14px; display: block; }
+#sleep .sleep-legend__edge { fill: none; stroke: var(--line-strong); stroke-width: 1; }
+
+/* ---- wider plates: the readout floats over the stage ---------------------------------------------- */
+@media (min-width: 640px) {
+  #sleep .sleep-stage { --plate-ar: 16 / 9.4; }
+  #sleep .sleep-readout { position: absolute; inset: 0; padding: 0; border: 0; pointer-events: none; align-items: stretch; }
+  #sleep .sleep-pose { position: absolute; left: 24px; bottom: 20px; }
+  #sleep .sleep-dial { position: absolute; right: 22px; top: 18px; }
+  #sleep .sleep-dial__svg { width: 96px; height: 96px; }
+}
+
+/* the no-JS state: the controls need script, so say so plainly */
+#sleep .sleep-plate:not(.is-ready) .sleep-controls,
+#sleep .sleep-plate:not(.is-ready) .sleep-readout { opacity: .55; }
+
+@media (prefers-reduced-motion: reduce) {
+  #sleep .sleep-dial__arc, #sleep .sleep-range::-webkit-slider-thumb { transition: none !important; }
+}

@@ -1,0 +1,104 @@
+<section id="sleep" class="sec" data-theme="night" aria-labelledby="sleep-title">
+  <div class="container sec__grid">
+    <div class="sec__head">
+      <p class="eyebrow" data-reveal><span class="eyebrow__num">5</span> <span class="eyebrow__text">Sleep position · exploratory</span></p>
+      <h2 class="h2" id="sleep-title" data-reveal="lines">A simulated night, replayed.</h2>
+      <p class="lede" data-reveal data-reveal-delay="1">Drag the timeline. The figure turns as the patch tilts.</p>
+      <div class="sleep-notes" data-reveal data-reveal-delay="2">
+        <p class="sleep-notes__flow">One sensor. One angle. Three postures.</p>
+        <p class="sleep-notes__limit">One sensor on the chest can tell how the chest is tilted. It cannot see arms, legs or head.</p>
+        <p class="sleep-notes__line">It shows position. It does not diagnose or judge.</p>
+      </div>
+    </div>
+
+    <figure class="plate sleep-plate sec__visual" data-reveal data-reveal-delay="1">
+      <!-- shared pattern defs for the ribbon, the legend and the dial (color AND pattern, never color alone) -->
+      <svg class="sleep-defs" width="0" height="0" aria-hidden="true" focusable="false">
+        <defs>
+          <pattern id="sleep-pat-back" width="8" height="8" patternUnits="userSpaceOnUse">
+            <rect width="8" height="8" class="sleep-pat__back"/>
+          </pattern>
+          <pattern id="sleep-pat-side" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect width="8" height="8" class="sleep-pat__side"/>
+            <rect width="3" height="8" class="sleep-pat__side-line"/>
+          </pattern>
+          <pattern id="sleep-pat-tummy" width="7" height="7" patternUnits="userSpaceOnUse">
+            <rect width="7" height="7" class="sleep-pat__tummy"/>
+            <circle cx="3.5" cy="3.5" r="1.35" class="sleep-pat__tummy-dot"/>
+          </pattern>
+        </defs>
+      </svg>
+
+      <div class="sleep-view">
+        <div class="plate__stage sleep-stage">
+          <!--@include stars.svg.html-->
+          <div class="sleep-glow" aria-hidden="true"></div>
+          <canvas class="sleep-canvas" aria-hidden="true"></canvas>
+          <div class="plate__badges">
+            <span class="exp-tag">Exploratory visualization of simulated data</span>
+            <span class="sim-tag"></span>
+          </div>
+        </div>
+
+        <div class="sleep-readout">
+          <div class="sleep-pose">
+            <span class="sleep-pose__kicker">Posture</span>
+            <span class="sleep-pose__label" id="sleep-pose-label">On back</span>
+          </div>
+          <div class="sleep-dial" role="group" aria-label="Sensor dial, simulated">
+            <svg class="sleep-dial__svg" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+              <circle class="sleep-dial__face" cx="60" cy="60" r="54"/>
+              <circle class="sleep-dial__ring" cx="60" cy="60" r="54"/>
+              <g class="sleep-dial__zones">
+                <path class="sleep-dial__arc sleep-dial__arc--back" d="M21.8 98.2 A54 54 0 0 0 98.2 98.2"/>
+                <path class="sleep-dial__arc sleep-dial__arc--side" d="M98.2 98.2 A54 54 0 0 0 98.2 21.8"/>
+                <path class="sleep-dial__arc sleep-dial__arc--side" d="M21.8 21.8 A54 54 0 0 0 21.8 98.2"/>
+                <path class="sleep-dial__arc sleep-dial__arc--tummy" d="M98.2 21.8 A54 54 0 0 0 21.8 21.8"/>
+              </g>
+              <circle class="sleep-dial__body" cx="60" cy="60" r="27"/>
+              <circle class="sleep-dial__patchdot" cx="60" cy="31" r="3.4"/>
+              <g class="sleep-dial__arrow" transform="rotate(0 60 60)">
+                <line x1="60" y1="60" x2="60" y2="86"/>
+                <path d="M60 99 L54.2 86 L65.8 86 Z"/>
+              </g>
+              <circle class="sleep-dial__hub" cx="60" cy="60" r="3.2"/>
+            </svg>
+            <div class="sleep-dial__text">
+              <span class="sleep-dial__kicker">Sensor dial · simulated</span>
+              <span class="sleep-dial__angle"><span class="sleep-dial__num tnum" id="sleep-angle">0</span><span class="sleep-dial__deg">°</span> <span class="sleep-dial__word">tilt</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sleep-controls">
+        <div class="sleep-controls__row">
+          <button type="button" class="btn btn--primary btn--sm sleep-play" id="sleep-play" aria-label="Play the simulated night">
+            <svg class="sleep-play__i sleep-play__i--play" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4.5 3.2 L12.2 8 L4.5 12.8 Z"/></svg>
+            <svg class="sleep-play__i sleep-play__i--pause" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.5 V12.5 M11 3.5 V12.5"/></svg>
+            <span class="sleep-play__text">Play</span>
+          </button>
+          <p class="sleep-time"><span class="sleep-time__kicker">Simulated time</span> <span class="sleep-time__val tnum" id="sleep-time">9:30 pm</span></p>
+        </div>
+
+        <div class="sleep-track" id="sleep-track">
+          <svg class="sleep-ribbon" id="sleep-ribbon" aria-hidden="true" focusable="false"></svg>
+          <div class="sleep-ticks" aria-hidden="true"></div>
+          <div class="sleep-playhead" aria-hidden="true"></div>
+          <input class="sleep-range" id="sleep-range" type="range" min="0" max="540" step="1" value="30" aria-label="Time of the simulated night" aria-valuetext="10:00 pm, on back">
+          <div class="sleep-axis" aria-hidden="true">
+            <span style="--x:0">9:30 pm</span><span style="--x:.2778">12 am</span><span style="--x:.6111">3 am</span><span style="--x:1">6:30 am</span>
+          </div>
+        </div>
+
+        <ul class="sleep-legend" aria-label="Ribbon key">
+          <li><svg viewBox="0 0 28 14" aria-hidden="true" focusable="false"><rect width="28" height="14" rx="3" fill="url(#sleep-pat-back)"/><rect class="sleep-legend__edge" x=".5" y=".5" width="27" height="13" rx="2.5"/></svg>On back</li>
+          <li><svg viewBox="0 0 28 14" aria-hidden="true" focusable="false"><rect width="28" height="14" rx="3" fill="url(#sleep-pat-side)"/><rect class="sleep-legend__edge" x=".5" y=".5" width="27" height="13" rx="2.5"/></svg>On side</li>
+          <li><svg viewBox="0 0 28 14" aria-hidden="true" focusable="false"><rect width="28" height="14" rx="3" fill="url(#sleep-pat-tummy)"/><rect class="sleep-legend__edge" x=".5" y=".5" width="27" height="13" rx="2.5"/></svg>On tummy</li>
+        </ul>
+      </div>
+
+      <figcaption class="plate__caption"><span class="plate__fig">Fig. 4</span> Illustration, not to scale. The figure, the dial and the night are simulated.</figcaption>
+    </figure>
+  </div>
+</section>

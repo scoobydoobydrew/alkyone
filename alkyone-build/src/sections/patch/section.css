@@ -1,0 +1,218 @@
+/* ---- patch: a night plate with a 3D viewer (SVG twin underneath), five hotspots, one detail card ------------------ */
+#patch { position: relative; }
+
+/* a faint field of stars: eleven tiny tiles (not full-size layers: those are expensive to paint on a long scene) */
+#patch .patch-sky {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+  --patch-star: color-mix(in srgb, var(--fg) 80%, transparent);
+  background-repeat: no-repeat;
+  background-image:
+    radial-gradient(circle, var(--patch-star) 0, var(--patch-star) 36%, transparent 64%),
+    radial-gradient(circle, var(--patch-star) 0, var(--patch-star) 36%, transparent 64%),
+    radial-gradient(circle, var(--patch-star) 0, var(--patch-star) 36%, transparent 64%),
+    radial-gradient(circle, var(--patch-star) 0, var(--patch-star) 36%, transparent 64%),
+    radial-gradient(circle, var(--patch-star) 0, var(--patch-star) 36%, transparent 64%),
+    radial-gradient(circle, var(--patch-star) 0, var(--patch-star) 36%, transparent 64%),
+    radial-gradient(circle, var(--patch-star) 0, var(--patch-star) 36%, transparent 64%),
+    radial-gradient(circle, var(--patch-star) 0, var(--patch-star) 36%, transparent 64%),
+    radial-gradient(circle, var(--patch-star) 0, var(--patch-star) 36%, transparent 64%),
+    radial-gradient(circle, var(--patch-star) 0, var(--patch-star) 36%, transparent 64%),
+    radial-gradient(circle, var(--patch-star) 0, var(--patch-star) 36%, transparent 64%);
+  background-size: 4px 4px, 3px 3px, 5px 5px, 3px 3px, 4px 4px, 3px 3px, 5px 5px, 3px 3px, 4px 4px, 3px 3px, 5px 5px;
+  background-position: 7% 24%, 14% 62%, 21% 38%, 31% 78%, 43% 20%, 52% 68%, 61% 30%, 72% 80%, 82% 46%, 90% 26%, 94% 70%;
+}
+#patch .patch-grid { position: relative; z-index: 1; }
+#patch .patch-head { align-self: start; }
+
+/* ------------------------------------------------------------------------------------------------ the plate */
+#patch .patch-plate { width: 100%; max-width: 640px; justify-self: center; }
+#patch .patch-stage { isolation: isolate; overflow: clip; touch-action: pan-y; cursor: grab; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
+#patch .patch-stage:active { cursor: grabbing; }
+/* the visible ring is an overlay (an outline would paint behind the canvas); the transparent outline still shows in forced-colors mode */
+#patch .patch-stage:focus-visible { outline: 2px solid transparent; outline-offset: -9px; }
+#patch .patch-stage:focus-visible::after {
+  content: ''; position: absolute; inset: 7px; z-index: 5; pointer-events: none;
+  border: 2px solid var(--focus); border-radius: calc(var(--r-4) - 7px);
+}
+#patch .patch-glow {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(56% 52% at 50% 46%, color-mix(in srgb, var(--teal-600) 30%, transparent), transparent 74%),
+    radial-gradient(26% 24% at 50% 46%, color-mix(in srgb, var(--warm) 9%, transparent), transparent 80%);
+}
+#patch .patch-fig { position: absolute; inset: 0; z-index: 1; }
+/* the torso fades into the night toward the edges, so the eye lands on the patch */
+#patch .patch-vignette {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: radial-gradient(62% 58% at 50% 46%, transparent 46%, color-mix(in srgb, var(--night-900) 62%, transparent) 78%, color-mix(in srgb, var(--night-900) 92%, transparent) 100%);
+}
+#patch .patch-svgwrap {
+  position: absolute; inset: 0; transform-origin: 0 0;
+  transition: transform var(--patch-ease, 0ms) var(--ease-out), opacity 900ms var(--ease-out);
+}
+#patch .patch-fallback { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#patch .viewer-canvas { opacity: 0; transition: opacity 900ms var(--ease-out); }
+#patch .patch-fig.is-3d .viewer-canvas { opacity: 1; }
+#patch .patch-fig.is-3d .patch-svgwrap { opacity: 0; }
+#patch .patch-fig.is-3d-done .patch-svgwrap { visibility: hidden; }
+#patch .patch-fig.is-lost .viewer-canvas { transition: none; }
+
+/* the SVG twin pulses on its own when the 3D is not there (one soft pulse per 1.6 s, like the scene) */
+#patch .fb-pulse { animation: patch-pulse 1.6s ease-in-out infinite; }
+#patch .fb-glow { animation: patch-glow 1.6s ease-in-out infinite; }
+@keyframes patch-pulse { 0%, 100% { opacity: .84; } 26% { opacity: 1; } }
+@keyframes patch-glow { 0%, 100% { opacity: .5; } 26% { opacity: 1; } }
+#patch:not(.is-visible) .fb-pulse, #patch:not(.is-visible) .fb-glow, #patch .patch-fig.is-3d-done .fb-pulse, #patch .patch-fig.is-3d-done .fb-glow { animation-play-state: paused; }
+
+/* ---- hotspots: numbered warm dots over the figure (the list under the figure is the keyboard path) ---------------- */
+#patch .patch-hots { position: absolute; inset: 0; z-index: 3; pointer-events: none; visibility: hidden; }
+#patch .patch-stage.is-ready .patch-hots { visibility: visible; }
+#patch .patch-hot {
+  position: absolute; left: 0; top: 0; width: 46px; height: 46px; margin: -23px 0 0 -23px; padding: 0;
+  display: grid; place-items: center; border: 0; background: none; color: inherit; font: inherit;
+  pointer-events: auto; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  transition: opacity var(--dur-2) var(--ease-out);
+}
+#patch .patch-stage[data-mode="svg"] .patch-hot { transition: transform var(--patch-ease, 0ms) var(--ease-out), opacity var(--dur-2) var(--ease-out); }
+#patch .patch-hot.is-away { opacity: 0; pointer-events: none; }
+#patch .patch-hot__dot {
+  position: relative; z-index: 1; width: 26px; height: 26px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--warm); color: var(--night-950);
+  font: 700 .75rem/1 var(--font-body); font-variant-numeric: tabular-nums;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--night-900) 72%, transparent), 0 0 0 4.5px color-mix(in srgb, var(--warm) 52%, transparent);
+  transition: transform var(--dur-2) var(--ease-out), background-color var(--dur-2) var(--ease-out);
+}
+#patch .patch-hot[aria-pressed="true"] .patch-hot__dot { transform: scale(1.14); background: var(--warm-200); }
+@media (hover: hover) and (pointer: fine) { #patch .patch-hot:hover .patch-hot__dot { transform: scale(1.14); } }
+@media (max-width: 359px) {
+  #patch .patch-hot__dot { width: 22px; height: 22px; font-size: .75rem; box-shadow: 0 0 0 2.5px color-mix(in srgb, var(--night-900) 72%, transparent), 0 0 0 4px color-mix(in srgb, var(--warm) 52%, transparent); }
+}
+
+/* a pulse ring on the chosen dot, and (when the figure is the flat drawing) a ring around the part itself */
+#patch .patch-hot::before {
+  content: ''; position: absolute; left: 50%; top: 50%; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%;
+  border: 1.5px solid var(--warm); opacity: 0; pointer-events: none;
+}
+#patch.is-visible .patch-hot[aria-pressed="true"]::before { animation: patch-ping 2.4s var(--ease-out) infinite; }
+@keyframes patch-ping { 0% { transform: scale(1); opacity: .8; } 70%, 100% { transform: scale(2.3); opacity: 0; } }
+#patch .patch-hot__ring {
+  position: absolute; left: calc(50% + var(--ax, 0px)); top: calc(50% + var(--ay, 0px)); width: var(--rw, 60px); height: var(--rh, 60px); margin: calc(var(--rh, 60px) / -2) 0 0 calc(var(--rw, 60px) / -2);
+  border-radius: 50%; border: 1.5px solid var(--warm); opacity: 0; transform: scale(.7); pointer-events: none;
+  box-shadow: 0 0 22px -2px color-mix(in srgb, var(--warm) 55%, transparent), inset 0 0 18px -6px color-mix(in srgb, var(--warm) 50%, transparent);
+  transition: opacity var(--dur-3) var(--ease-out) 260ms, transform var(--dur-3) var(--ease-out) 260ms;
+}
+#patch .patch-stage[data-mode="svg"] .patch-hot[aria-pressed="true"] .patch-hot__ring { opacity: 1; transform: none; }
+
+#patch .patch-hot__lead {
+  position: absolute; left: 50%; top: 50%; z-index: 0; width: var(--ll, 0px); height: 1px; margin-top: -.5px;
+  background: color-mix(in srgb, var(--warm) 75%, transparent); transform-origin: 0 50%; transform: rotate(var(--la, 0rad));
+  opacity: 0; pointer-events: none;
+}
+#patch .patch-hot__lead::after { content: ''; position: absolute; right: -3px; top: -2.5px; width: 6px; height: 6px; border-radius: 50%; background: var(--warm); box-shadow: 0 0 0 2px color-mix(in srgb, var(--night-900) 70%, transparent); }
+#patch .patch-hot.has-lead .patch-hot__lead { opacity: 1; }
+#patch .patch-hot__label {
+  position: absolute; z-index: 2; top: 50%; left: calc(50% + 23px); transform: translate(-4px, -50%);
+  padding: .32rem .7rem; border-radius: var(--r-pill); white-space: nowrap;
+  background: color-mix(in srgb, var(--bg) 90%, transparent); border: var(--hair) solid var(--line-strong);
+  color: var(--fg); font: 500 .8125rem/1.2 var(--font-body);
+  opacity: 0; pointer-events: none;
+  transition: opacity var(--dur-2) var(--ease-out), transform var(--dur-2) var(--ease-out);
+}
+#patch .patch-hot.is-left .patch-hot__label { left: auto; right: calc(50% + 23px); transform: translate(4px, -50%); }
+#patch .patch-hot[aria-pressed="true"] .patch-hot__label { opacity: 1; transform: translate(0, -50%); }
+@media (hover: hover) and (pointer: fine) { #patch .patch-hot:hover .patch-hot__label { opacity: 1; transform: translate(0, -50%); } }
+
+/* ---- viewer controls ------------------------------------------------------------------------------------------- */
+#patch .patch-tools {
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0;
+  width: max-content; max-width: calc(100% - 24px); margin: 12px auto 0;
+  border: var(--hair) solid var(--line-strong); border-radius: 26px; background: var(--surface);
+}
+#patch .patch-tool {
+  position: relative; width: 44px; height: 44px; padding: 0; display: grid; place-items: center;
+  border: 0; border-radius: 50%; background: none; color: var(--fg); cursor: pointer;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
+}
+#patch .patch-tool svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+#patch .patch-tool:active { transform: scale(.92); }
+#patch .patch-tool--sep::before { content: ''; position: absolute; left: -.5px; top: 11px; bottom: 11px; width: 1px; background: var(--line-strong); }
+@media (hover: hover) and (pointer: fine) { #patch .patch-tool:hover { background: var(--surface-2); } }
+@media (max-width: 359px) { #patch .patch-tools__g:last-child .patch-tool--sep::before { display: none; } #patch .patch-tools__g:last-child .patch-tool--sep { margin-left: 0; } }
+@media (min-width: 420px) { #patch .patch-tool--sep { margin-left: 10px; } #patch .patch-tool--sep::before { left: -5.5px; } #patch .patch-tools { padding-inline: 6px; } }
+/* the flat drawing can only zoom and move, so the turning and tilting group is left out of the bar */
+#patch .patch-tools__g { display: flex; }
+#patch .patch-stage[data-mode="svg"] ~ .patch-tools .patch-tools__g--turn { display: none; }
+#patch .patch-stage[data-mode="svg"] ~ .patch-tools [data-act="out"] { margin-left: 0; }
+#patch .patch-stage[data-mode="svg"] ~ .patch-tools [data-act="out"]::before { display: none; }
+
+#patch .patch-help { margin: 10px 20px 14px; text-align: center; color: var(--fg-muted); font-size: .8125rem; line-height: 1.45; }
+/* four wordings: touch or mouse, 3D or the flat drawing (which can only zoom and move) */
+#patch .patch-help__mouse, #patch .patch-help__ftouch, #patch .patch-help__fmouse { display: none; }
+@media (hover: hover) and (pointer: fine) { #patch .patch-help__touch { display: none; } #patch .patch-help__mouse { display: inline; } }
+#patch .patch-stage[data-mode="svg"] ~ .patch-help .patch-help__touch, #patch .patch-stage[data-mode="svg"] ~ .patch-help .patch-help__mouse { display: none; }
+#patch .patch-stage[data-mode="svg"] ~ .patch-help .patch-help__ftouch { display: inline; }
+@media (hover: hover) and (pointer: fine) {
+  #patch .patch-stage[data-mode="svg"] ~ .patch-help .patch-help__ftouch { display: none; }
+  #patch .patch-stage[data-mode="svg"] ~ .patch-help .patch-help__fmouse { display: inline; }
+}
+
+/* ------------------------------------------------------------------------------------------------ list + card */
+#patch .patch-panel { display: flex; flex-direction: column; gap: var(--s-5); min-width: 0; }
+#patch .patch-list { list-style: none; margin: 0; padding: 0; border-top: var(--hair) solid var(--line); }
+#patch .patch-list > li { border-bottom: var(--hair) solid var(--line); }
+#patch .patch-item {
+  width: 100%; min-height: 52px; padding: .45rem .2rem; display: grid; grid-template-columns: 30px minmax(0, 1fr); align-items: center; column-gap: var(--s-3);
+  border: 0; background: none; color: var(--fg); text-align: left; cursor: pointer;
+  font: 500 1rem/1.3 var(--font-body); touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  transition: color var(--dur-2) var(--ease-out);
+}
+#patch .patch-item__n {
+  width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
+  border: var(--hair) solid var(--line-strong); color: var(--fg-muted);
+  font: 600 .75rem/1 var(--font-body); font-variant-numeric: tabular-nums;
+  transition: background-color var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out), color var(--dur-2) var(--ease-out);
+}
+#patch .patch-item[aria-pressed="true"] { font-weight: 600; }
+#patch .patch-item[aria-pressed="true"] .patch-item__n { background: var(--warm); border-color: var(--warm); color: var(--night-950); }
+@media (hover: hover) and (pointer: fine) {
+  #patch .patch-item:hover .patch-item__n { border-color: var(--warm); color: var(--fg); }
+  #patch .patch-item[aria-pressed="true"]:hover .patch-item__n { color: var(--night-950); }
+}
+#patch .patch-item:focus-visible { outline-offset: -2px; border-radius: var(--r-1); }
+#patch .patch-item__text { margin: 0 0 var(--s-4) calc(30px + var(--s-3)); color: var(--fg-muted); max-width: 44ch; }
+#patch.is-enhanced .patch-item__text { display: none; }
+
+#patch .patch-card {
+  order: -1; min-height: 9.5rem; padding: var(--s-5); border-radius: var(--r-3);
+  border: var(--hair) solid var(--plate-line); background: var(--surface);
+  display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--s-4); align-content: start; align-items: center;
+  animation: patch-in var(--dur-3) var(--ease-out) both;
+}
+#patch .patch-card:empty { display: none; }
+#patch .patch-card.is-idle { display: block; align-content: center; }
+#patch .patch-card__idle { margin: 0; color: var(--fg-muted); font: italic 400 1.25rem/1.35 var(--font-display); max-width: 30ch; }
+#patch .patch-card__n {
+  width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+  border: 1.5px solid var(--warm); color: var(--warm-ink);
+  font: 600 .875rem/1 var(--font-body); font-variant-numeric: tabular-nums;
+}
+#patch .patch-card__t { margin: 0; font: 400 clamp(1.55rem, 1.2rem + 1.3vw, 2.1rem)/1.1 var(--font-display); letter-spacing: -.005em; text-wrap: balance; }
+#patch .patch-card__p { grid-column: 2; margin: .65rem 0 0; color: var(--fg-muted); max-width: 42ch; }
+@keyframes patch-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ------------------------------------------------------------------------------------------------ desktop */
+@media (min-width: 960px) {
+  #patch .patch-grid { row-gap: var(--s-6); align-items: center; }
+  #patch .patch-head { grid-column: 1 / span 5; grid-row: 1; align-self: end; }
+  #patch .patch-panel { grid-column: 1 / span 5; grid-row: 2; align-self: start; }
+  #patch .patch-card { order: 0; }
+  #patch .patch-plate { grid-column: 6 / -1; grid-row: 1 / span 2; max-width: clamp(430px, calc(100svh - 270px), 660px); }
+}
+@media (min-width: 960px) and (max-height: 700px) { #patch .patch-plate { max-width: 430px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  #patch .fb-pulse, #patch .fb-glow, #patch .patch-hot::before, #patch .patch-card { animation: none !important; }
+  #patch .patch-svgwrap, #patch .viewer-canvas { transition-duration: 1ms !important; }
+}

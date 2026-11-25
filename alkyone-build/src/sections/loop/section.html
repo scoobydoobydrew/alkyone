@@ -1,0 +1,66 @@
+<section id="loop" class="sec" data-theme="mist" aria-labelledby="loop-title">
+  <div class="container sec__grid loop-grid">
+    <div class="sec__head loop-head">
+      <p class="eyebrow" data-reveal><span class="eyebrow__num">1</span> <span class="eyebrow__text">The system · concept</span></p>
+      <h2 class="h2" id="loop-title" data-reveal="lines">One loop that <em>closes</em>.</h2>
+      <p class="lede" data-reveal data-reveal-delay="1">Alkyone is a concept for a single closed loop: notice, send, alert, acknowledge, learn. Every step has a fallback, so a quiet moment is never just assumed to be fine.</p>
+    </div>
+
+    <div class="loop-panel" data-reveal data-reveal-delay="1">
+      <p class="label loop-try">Pick a step, or try breaking one</p>
+      <div class="loop-chips" role="group" aria-label="Break a step of the loop">
+        <button type="button" class="chip loop-chip" data-case="signal" aria-pressed="false">Signal drops</button>
+        <button type="button" class="chip loop-chip" data-case="off" aria-pressed="false">Patch comes off</button>
+        <button type="button" class="chip loop-chip" data-case="nobody" aria-pressed="false">Nobody answers</button>
+        <button type="button" class="chip loop-chip" data-case="battery" aria-pressed="false">Battery runs low <span class="exp-tag"></span></button>
+      </div>
+      <div class="loop-card" id="loop-card" aria-live="polite" aria-atomic="true">
+        <p class="loop-card__idle">Tap a step on the loop to read what it does and what happens if it fails.</p>
+      </div>
+
+      <div class="loop-scale" aria-label="How the buzz scales">
+        <p class="label">The buzz scales with the need</p>
+        <ul class="loop-scale__list">
+          <li><span class="loop-bars loop-bars--soft" aria-hidden="true"><i></i></span><span><strong>Routine</strong> One soft buzz. Nothing to do.</span></li>
+          <li><span class="loop-bars loop-bars--firm" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>Needs attention</strong> A firm pattern that repeats until you acknowledge it.</span></li>
+          <li><span class="loop-bars loop-bars--firm loop-bars--again" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span><span><strong>No answer</strong> It keeps repeating. Passing it to a second person is an idea we want to explore.</span></li>
+        </ul>
+      </div>
+
+      <ol class="loop-steps">
+        <li data-id="sense"><h3>1 · Notice</h3><p>The patch notices heart rate and <button type="button" class="term" data-term="spo2">SpO<sub>2</sub></button>, skin temperature, motion and position, sound and whether it is on the skin.</p><p class="loop-fb"><strong>If it fails:</strong> if the patch comes off, wear detection says so instead of going quiet.</p></li>
+        <li data-id="send"><h3>2 · Send</h3><p>The patch sends what it notices to the ring over <button type="button" class="term" data-term="ble">BLE</button>, with a steady <button type="button" class="term" data-term="heartbeat">heartbeat</button>.</p><p class="loop-fb"><strong>If it fails:</strong> if the heartbeat stops, silence is treated as an alert.</p></li>
+        <li data-id="alert"><h3>3 · Alert</h3><p>The ring buzzes in patterns that scale: one soft buzz for routine, a firm pattern for needs attention.</p><p class="loop-fb"><strong>If it fails:</strong> the firm pattern repeats until someone acknowledges it.</p></li>
+        <li data-id="ack"><h3>4 · Acknowledge</h3><p>Tap the ring. The patch and the app are told, and the buzzing stops. That closes the loop.</p><p class="loop-fb"><strong>If it fails:</strong> with no answer, the alert keeps repeating. Passing it to a second person is exploratory.</p></li>
+        <li data-id="learn" data-exp="1"><h3>5 · Learn</h3><p><button type="button" class="term" data-term="ml">Machine learning</button> that learns what is typical for this baby, not babies in general.</p><p class="loop-fb"><strong>Status:</strong> an idea we want to explore. It is not built.</p></li>
+        <li data-id="check" data-exp="1"><h3>6 · Self-check</h3><p><button type="button" class="term" data-term="maintenance">Predictive maintenance</button>: warn about a weak battery, poor skin contact or a fading signal before they cause trouble.</p><p class="loop-fb"><strong>Status:</strong> an idea we want to explore. It is not built.</p></li>
+      </ol>
+    </div>
+
+    <figure class="plate plate--square sec__visual loop-plate" data-reveal>
+      <div class="plate__badges"><span class="exp-tag">Concept diagram</span></div>
+      <div class="plate__stage loop-stage" id="loop-stage">
+        <svg class="loop-svg" viewBox="0 0 600 600" aria-hidden="true" focusable="false">
+          <circle class="loop-track" cx="300" cy="300" r="216"/>
+          <path class="loop-core" id="loop-core" d="M300 84 A216 216 0 0 1 300 516"/>
+          <path class="loop-exp" d="M300 516 A216 216 0 0 1 300 84"/>
+          <path id="loop-run" d="M300 84 A216 216 0 0 1 300 516 A216 216 0 0 1 300 84" fill="none" stroke="none"/>
+          <circle class="loop-pulse" id="loop-pulse" r="7" cx="300" cy="84"/>
+          <g class="loop-center">
+            <text x="300" y="292" text-anchor="middle" class="loop-center__a">closed</text>
+            <text x="300" y="334" text-anchor="middle" class="loop-center__b">loop</text>
+          </g>
+        </svg>
+        <div class="loop-nodes">
+          <button type="button" class="loop-node" data-id="sense" style="--a:-90" aria-pressed="false" aria-label="1, Notice"><span class="loop-node__n" aria-hidden="true">1</span><span class="loop-node__t" aria-hidden="true">Notice</span></button>
+          <button type="button" class="loop-node" data-id="send" style="--a:-30" aria-pressed="false" aria-label="2, Send"><span class="loop-node__n" aria-hidden="true">2</span><span class="loop-node__t" aria-hidden="true">Send</span></button>
+          <button type="button" class="loop-node" data-id="alert" style="--a:30" aria-pressed="false" aria-label="3, Alert"><span class="loop-node__n" aria-hidden="true">3</span><span class="loop-node__t" aria-hidden="true">Alert</span></button>
+          <button type="button" class="loop-node" data-id="ack" style="--a:90" aria-pressed="false" aria-label="4, Acknowledge"><span class="loop-node__n" aria-hidden="true">4</span><span class="loop-node__t" aria-hidden="true">Acknowledge</span></button>
+          <button type="button" class="loop-node loop-node--exp" data-id="learn" style="--a:150" aria-pressed="false" aria-label="5, Learn, exploratory"><span class="loop-node__n" aria-hidden="true">5</span><span class="loop-node__t" aria-hidden="true">Learn</span></button>
+          <button type="button" class="loop-node loop-node--exp" data-id="check" style="--a:210" aria-pressed="false" aria-label="6, Self-check, exploratory"><span class="loop-node__n" aria-hidden="true">6</span><span class="loop-node__t" aria-hidden="true">Self-check</span></button>
+        </div>
+      </div>
+      <figcaption class="plate__caption">Illustration of the concept. Dashed steps are exploratory. It is not a tested system.</figcaption>
+    </figure>
+  </div>
+</section>
