@@ -49,23 +49,23 @@
         var q = clamp(-r.top / total, 0, 1);
         if (Math.abs(q - lastQ) < .0004) return; lastQ = q;
         /* 1. the photo zooms toward the patch */
-        var e = easeIO(clamp(q / .32)), s = 1 + (M.S - 1) * e;
+        var e = easeIO(clamp(q / .27)), s = 1 + (M.S - 1) * e;
         var cx = M.P0.x + (M.C.x - M.P0.x) * e, cy = M.P0.y + (M.C.y - M.P0.y) * e;
         photo.style.transform = 'translate3d(' + (cx - M.sx - s * M.px).toFixed(1) + 'px,' + (cy - M.sy - s * M.py).toFixed(1) + 'px,0) scale(' + s.toFixed(3) + ')';
-        var po = 1 - smooth(.24, .4, q); photo.style.opacity = po.toFixed(3); photo.style.visibility = po < .01 ? 'hidden' : '';
+        var po = 1 - smooth(.19, .33, q); photo.style.opacity = po.toFixed(3); photo.style.visibility = po < .01 ? 'hidden' : '';
         /* copy and foot step aside */
-        var co = 1 - smooth(0, .16, q); copy.style.opacity = co.toFixed(3); copy.style.transform = 'translate3d(0,' + (-28 * (1 - co)).toFixed(1) + 'px,0)'; copy.style.visibility = co < .01 ? 'hidden' : '';
-        var fo = 1 - smooth(0, .1, q); foot.style.opacity = fo.toFixed(3); foot.style.visibility = fo < .01 ? 'hidden' : '';
-        stage.querySelector('.hero-caption').style.opacity = (1 - smooth(0, .12, q)).toFixed(3);
+        var co = 1 - smooth(0, .1, q); copy.style.opacity = co.toFixed(3); copy.style.transform = 'translate3d(0,' + (-28 * (1 - co)).toFixed(1) + 'px,0)'; copy.style.visibility = co < .01 ? 'hidden' : '';
+        var fo = 1 - smooth(0, .06, q); foot.style.opacity = fo.toFixed(3); foot.style.visibility = fo < .01 ? 'hidden' : '';
+        stage.querySelector('.hero-caption').style.opacity = (1 - smooth(0, .08, q)).toFixed(3);
         /* 2. the flexible circuit arrives and grows to fill the plate */
-        var zo = smooth(.24, .38, q);
+        var zo = smooth(.19, .31, q);
         zoom.style.opacity = zo > .005 ? '1' : '0'; zoom.style.visibility = zo > .005 ? 'visible' : 'hidden';
-        var k = M.k0 + (1 - M.k0) * easeO(smooth(.24, .52, q));
+        var k = M.k0 + (1 - M.k0) * easeO(smooth(.19, .4, q));
         lens.style.opacity = zo.toFixed(3); lens.style.transform = 'scale(' + k.toFixed(3) + ')';
-        var to = smooth(.44, .54, q); kicker.style.opacity = to.toFixed(3); cap.style.opacity = to.toFixed(3);
+        var to = smooth(.33, .42, q); kicker.style.opacity = to.toFixed(3); cap.style.opacity = to.toFixed(3);
         /* 3. the six cards, scrubbed by scroll. Position p runs 0..N over the card phase; between two steps the old card
               slides up and fades while the new one slides in over it, and the ring glides from one part to the next. */
-        var cardIn = smooth(.5, .56, q), f = clamp((q - .54) / .4);
+        var cardIn = smooth(.38, .43, q), f = clamp((q - .42) / .54);
         var a = clamp(f * N - .5, 0, N - 1), i0 = Math.min(N - 2, Math.floor(a)), t = smooth(.25, .75, a - i0), pos = i0 + t;
         card.style.opacity = cardIn.toFixed(3); card.style.visibility = cardIn < .01 ? 'hidden' : '';
         var mv = A.reduced ? 0 : 22;
@@ -76,7 +76,7 @@
           it.style.opacity = o.toFixed(3); it.style.visibility = o < .01 ? 'hidden' : 'visible'; it.style.transform = 'translate3d(0,' + y.toFixed(1) + 'px,0)';
         });
         var w = function (i) { return i === i0 ? 1 - t : i === i0 + 1 ? t : 0; };
-        var dim = smooth(.5, .58, q), part = function (el, k, lo) { el.style.opacity = (1 - dim * (1 - (lo + (1 - lo) * w(k)))).toFixed(3); };
+        var dim = smooth(.38, .45, q), part = function (el, k, lo) { el.style.opacity = (1 - dim * (1 - (lo + (1 - lo) * w(k)))).toFixed(3); };
         parts.forEach(function (g) { part(g, +g.getAttribute('data-part') - 1, .3); });
         mks.forEach(function (g) { part(g, +g.getAttribute('data-for') - 1, .42); });
         var c0 = SPOT[i0], c1 = SPOT[i0 + 1], rs = lerp(c0[2], c1[2], t) / 100;
