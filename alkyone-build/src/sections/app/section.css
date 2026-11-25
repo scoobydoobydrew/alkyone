@@ -150,7 +150,7 @@
 .app-panel .sim-tag { font-size: 12px; padding: .28rem .7rem .28rem .58rem; }
 .app-sub { margin: 0 0 10px; color: var(--app-muted); font-size: 12.5px; line-height: 1.4; }
 .app-label { margin: 0; color: var(--app-muted); font: 600 12px/1.25 var(--font-body); letter-spacing: .05em; text-transform: uppercase; }
-.app-label .term { text-transform: none; letter-spacing: .02em; font-weight: 600; }
+.app-label .term { text-transform: none; letter-spacing: .02em; font-weight: 600; display: inline-flex; align-items: center; min-height: 24px; margin-block: -6px; padding-block: 0; }
 .app-h4 { margin: 14px 0 8px; font: 600 12px/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--app-muted); }
 .app-h4__aside { margin-left: .6em; font-weight: 500; letter-spacing: .02em; text-transform: none; opacity: .85; }
 .app-note { margin: 12px 0 0; color: var(--app-muted); font-size: 12.5px; line-height: 1.45; }

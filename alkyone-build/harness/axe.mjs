@@ -9,7 +9,7 @@ const env = await launch({ preset: opt('preset', 'phone'), reducedMotion: flag('
 const { page } = env;
 try {
   await open(page, target, { settle: 1500 });
-  if (flag('scroll-all')) { for (const f of [0.2, 0.4, 0.6, 0.8, 1, 0]) await scrollToFrac(page, f, 300); }
+  if (flag('scroll-all')) { for (const f of [0.2, 0.4, 0.6, 0.8, 1, 0]) await scrollToFrac(page, f, 300); await page.waitForTimeout(Number(process.env.AXE_SETTLE || 0)); }
   await page.addScriptTag({ url: 'https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.10.2/axe.min.js' });
   const res = await page.evaluate(async () => {
     const r = await window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'] }, resultTypes: ['violations', 'incomplete'] });

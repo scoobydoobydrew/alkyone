@@ -35,11 +35,11 @@
     init: function (ctx) {
       var root = ctx.el;
       var $ = function (s) { return root.querySelector(s); };
-      var plate = $('.sleep-plate'), stage = $('.sleep-stage'), cv = $('.sleep-canvas'), c2 = cv.getContext('2d');
+      var plate = $('.sleep-plate'), stage = $('.sleep-stage'), cv = $('.sleep-canvas'), c2 = cv.getContext('2d'), gl = $('.sleep-gl');
       var range = $('#sleep-range'), playBtn = $('#sleep-play'), playTxt = $('.sleep-play__text'), timeEl = $('#sleep-time'), poseEl = $('#sleep-pose-label'), angEl = $('#sleep-angle');
       var track = $('#sleep-track'), ribbon = $('#sleep-ribbon'), dial = $('.sleep-dial'), arrow = $('.sleep-dial__arrow'), ticks = $('.sleep-ticks');
       var night = makeNight();
-      var minute = +range.value, shown = night.a[Math.round(minute)], playing = false, unsubAnim = null, unsubPlay = null, W = 0, H = 0, DPR = 1, lastPose = '', stepAcc = 0;
+      var minute = +range.value, shown = night.a[Math.round(minute)], mid = shown, G = null, glBusy = false, glDead = false, playing = false, unsubAnim = null, unsubPlay = null, W = 0, H = 0, DPR = 1, lastPose = '', stepAcc = 0;
 
       /* ribbon: one rect per run of the same posture, drawn at real pixel size so the patterns stay square */
       function drawRibbon() {
@@ -131,8 +131,9 @@
       function size() {
         DPR = Math.min(A.lowPower ? 1.5 : 2, window.devicePixelRatio || 1); W = stage.clientWidth; H = stage.clientHeight;
         cv.width = Math.max(1, Math.round(W * DPR)); cv.height = Math.max(1, Math.round(H * DPR)); refit();
+        if (G && W && H) G.resize(W, H, DPR);
       }
-      function draw() {
+      function draw2d() {
         if (!W || !H) return;
         var g = c2; g.setTransform(DPR, 0, 0, DPR, 0, 0); g.clearRect(0, 0, W, H);
         var th = shown * D2R, ct = Math.cos(th), st = Math.sin(th);
@@ -186,7 +187,7 @@
         range.setAttribute('aria-valuetext', clock(minute) + ', ' + LABEL[ps].toLowerCase());
         if (commit && A.announce && ps !== lastPose) A.announce(clock(minute) + ', ' + LABEL[ps].toLowerCase());
         lastPose = ps;
-        if (A.reduced) { shown = tgt; paint(tgt); draw(); } else { startAnim(); }
+        if (A.reduced) { shown = mid = tgt; paint(tgt); draw(); } else { startAnim(); }
       }
       function paint(v) {
         var w = ((v % 360) + 360) % 360; if (w > 180) w -= 360;
@@ -195,10 +196,14 @@
       function startAnim() {
         if (unsubAnim) return;
         unsubAnim = A.raf(function (t, dt) {
-          var tgt = night.a[Math.round(minute)], d = tgt - shown;
-          shown += d * (1 - Math.exp(-(dt || 16) / 110));
-          if (Math.abs(d) < .15) { shown = tgt; unsubAnim(); unsubAnim = null; }
-          paint(shown); draw();
+          /* two soft stages, so the figure eases in and out of every turn instead of chasing the slider */
+          var tgt = night.a[Math.round(minute)], k = 1 - Math.exp(-(dt || 16) / 320);
+          mid += (tgt - mid) * k; shown += (mid - shown) * k;
+          var done = Math.abs(tgt - shown) < .15 && Math.abs(tgt - mid) < .15;
+          if (done) shown = mid = tgt;
+          paint(shown);
+          var moving = draw(dt || 16);
+          if (done && !moving) { unsubAnim(); unsubAnim = null; }
         });
       }
       function setPlaying(on) {
@@ -212,7 +217,7 @@
           unsubPlay = A.raf(function (t, dt) {
             stepAcc += (dt || 16);
             if (A.reduced) { if (stepAcc >= 1000) { stepAcc = 0; setMinute(Math.min(N, minute + 20)); if (minute >= N) setPlaying(false); } return; }
-            setMinute(Math.min(N, minute + (dt || 16) / 1000 * 20));
+            setMinute(Math.min(N, minute + (dt || 16) / 1000 * 10));
             if (minute >= N) setPlaying(false);
           });
         }
@@ -221,12 +226,39 @@
       range.addEventListener('input', function () { setPlaying(false); setMinute(+range.value); });
       range.addEventListener('change', function () { setMinute(+range.value, true); });
 
+      /* the figure: a small 3D scene when WebGL is there (Three.js, loaded once for the page), the flat drawing above when it is not */
+      function draw(dt) {
+        if (G) { var moving = G.setAngle(shown, dt); G.render(); return moving; }
+        draw2d(); return false;
+      }
+      function flat() { glDead = true; G = null; stage.classList.remove('is-3d'); stage.classList.add('is-2d'); draw2d(); }
+      function glBoot() {
+        if (G || glBusy || glDead) return;
+        if (!A.hasWebGL || !A.hasWebGL() || !A.loadThree || !window.Alkyone.sleepBaby) { flat(); return; }
+        glBusy = true;
+        A.loadThree().then(function (T) {
+          glBusy = false;
+          if (G || glDead) return;
+          if (!T) { flat(); return; }
+          try {
+            G = window.Alkyone.sleepBaby.create(T, { canvas: gl, quality: A.lowPower ? 'low' : 'high', dpr: DPR, width: W, height: H, angle: shown });
+            gl.addEventListener('webglcontextlost', function (e) { e.preventDefault(); flat(); });
+          } catch (e) { G = null; flat(); return; }
+          size(); draw();
+          stage.classList.remove('is-2d'); stage.classList.add('is-3d');
+        }, function () { glBusy = false; flat(); });
+      }
+      function glLater() {
+        setTimeout(function () { if ('requestIdleCallback' in window) window.requestIdleCallback(glBoot, { timeout: 2500 }); else glBoot(); }, Math.max(0, 1600 - performance.now()));
+      }
       var onSize = function () { size(); drawRibbon(); draw(); };
       if (A.onResize) A.onResize(onSize);
-      size(); drawRibbon(); setMinute(minute); shown = night.a[Math.round(minute)]; paint(shown); draw();
+      size(); drawRibbon(); setMinute(minute); shown = mid = night.a[Math.round(minute)]; paint(shown);
+      if (A.hasWebGL && A.hasWebGL()) glLater(); else flat();
       plate.classList.add('is-ready');
-      api = { pause: function () { setPlaying(false); }, resize: onSize, redraw: function () { shown = night.a[Math.round(minute)]; paint(shown); draw(); } };
+      api = { pause: function () { setPlaying(false); }, resize: onSize, boot: glBoot, redraw: function () { shown = mid = night.a[Math.round(minute)]; paint(shown); draw(); } };
     },
+    enter: function () { if (api) api.boot(); },
     leave: function () { if (api) api.pause(); },
     resize: function () { if (api) api.resize(); },
     reducedChange: function () { if (api) api.redraw(); }

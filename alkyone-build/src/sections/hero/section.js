@@ -1,7 +1,7 @@
 (function () {
   'use strict';
   var A = window.Alkyone;
-  var PX = .533, PY = .505;                 /* where the patch sits on the photo, as fractions of the picture */
+  var PX = .566, PY = .506;                 /* where the patch sits on the photo, as fractions of the picture */
   var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
   var smooth = function (a, b, v) { var t = clamp((v - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
   var easeIO = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
@@ -15,7 +15,7 @@
       var zoom = $('#hero-zoom'), lens = $('#hero-lens'), kicker = $('.hero-zoom__kicker'), cap = $('.hero-zoom__cap'), card = $('#hero-card'), svg = $('#hero-circuit');
       var mark = $('.hero-mark__pad'), stack = $('#hero-stack'), ring = $('#hero-ring'), dots = [].slice.call(root.querySelectorAll('#hero-dots span')), dotFill = $('#hero-dots-fill');
       var steps = [].map.call(root.querySelectorAll('#hero-steps li'), function (li) {
-        return { part: li.getAttribute('data-part'), title: li.getAttribute('data-title'), text: li.querySelector('p').textContent.trim(), exp: !!li.getAttribute('data-exp') };
+        return { part: li.getAttribute('data-part'), title: li.getAttribute('data-title'), text: li.querySelector('p:not(.hero-steps__t)').textContent.trim(), exp: !!li.getAttribute('data-exp') };
       });
       var parts = [].slice.call(svg.querySelectorAll('.hc-part')), mks = [].slice.call(svg.querySelectorAll('.hc-mk'));
       var M = null, on = false, lastQ = -1;
@@ -43,11 +43,35 @@
         photo.style.transform = save[0]; lens.style.transform = save[1];
       }
 
+      /* The scroll position is read once per frame and eased through two soft stages before it is drawn. A wheel notch,
+         a flick or a jump therefore glides instead of stepping, and the same path runs in both directions. */
+      function readQ() {
+        var r = root.getBoundingClientRect(), total = Math.max(1, root.offsetHeight - window.innerHeight);
+        return clamp(-r.top / total, 0, 1);
+      }
+      var tgt = 0, g1 = 0, g2 = 0, stopGlide = null;
+      function glide(t, dt) {
+        var k = 1 - Math.exp(-dt / 95);
+        g1 += (tgt - g1) * k; g2 += (g1 - g2) * k;
+        var done = Math.abs(tgt - g2) < .0004 && Math.abs(g1 - g2) < .0004;
+        if (done) { g1 = g2 = tgt; }
+        render(g2);
+        if (done && stopGlide) { stopGlide(); stopGlide = null; }
+      }
       function update() {
         if (!on || !M) return;
-        var r = root.getBoundingClientRect(), total = Math.max(1, root.offsetHeight - window.innerHeight);
-        var q = clamp(-r.top / total, 0, 1);
-        if (Math.abs(q - lastQ) < .0004) return; lastQ = q;
+        tgt = readQ();
+        if (Math.abs(tgt - g2) < .0004 && Math.abs(g1 - g2) < .0004) return;
+        if (!stopGlide) stopGlide = A.raf(glide);
+      }
+      function jump() {            /* no easing: first draw, resize, or leaving the pinned mode */
+        if (stopGlide) { stopGlide(); stopGlide = null; }
+        tgt = g1 = g2 = readQ(); lastQ = -1; render(g2);
+      }
+
+      function render(q) {
+        if (!on || !M) return;
+        if (Math.abs(q - lastQ) < .00005) return; lastQ = q;
         /* 1. the photo zooms toward the patch */
         var e = easeIO(clamp(q / .27)), s = 1 + (M.S - 1) * e;
         var cx = M.P0.x + (M.C.x - M.P0.x) * e, cy = M.P0.y + (M.C.y - M.P0.y) * e;
@@ -87,17 +111,58 @@
       }
 
       function pinOn() {
-        if (on) return; on = true; root.classList.add('is-pinned'); lastQ = -1; measure(); update();
+        if (on) return; on = true; root.classList.add('is-pinned'); lastQ = -1; measure(); jump();
       }
       function pinOff() {
-        on = false; root.classList.remove('is-pinned');
+        on = false; root.classList.remove('is-pinned'); if (stopGlide) { stopGlide(); stopGlide = null; }
         [photo, lens, copy, foot, zoom, card, kicker, cap, ring, dotFill].forEach(function (n) { n.style.cssText = ''; });
         var c = stage.querySelector('.hero-caption'); if (c) c.style.cssText = '';
         items.concat(parts, mks, dots).forEach(function (n) { n.style.cssText = ''; });
       }
       function sync() { if (A.reduced) pinOff(); else pinOn(); }
 
-      api = { sync: sync, update: update, remeasure: function () { if (!on) return; var q = lastQ; lastQ = -1; measure(); update(); } };
+      api = { sync: sync, update: update, remeasure: function () { if (!on) return; measure(); jump(); } };
+      /* "See how it works": scroll the pinned hero by itself, with a gentle ease, and stop exactly where step 1 is settled
+         (circuit fully grown, card 1 fully in, ring in place). Any wheel, touch, key or pointer press takes control back. */
+      var LAND = .458;
+      var how = $('#hero-how'), flight = 0, tFlight = 0, unbind = null;
+      function landingY() {
+        var top = root.getBoundingClientRect().top + window.pageYOffset, total = Math.max(1, root.offsetHeight - window.innerHeight);
+        return Math.round(top + total * LAND);
+      }
+      function endFlight() {
+        if (flight) cancelAnimationFrame(flight); flight = 0; tFlight = 0;
+        if (unbind) { unbind(); unbind = null; }
+      }
+      function arrive() {
+        zoom.setAttribute('tabindex', '-1'); try { zoom.focus({ preventScroll: true }); } catch (e) {}
+        if (A.announce && steps[0]) A.announce('Step 1 of ' + N + ', ' + steps[0].title + '. ' + steps[0].text);
+      }
+      function fly() {
+        endFlight();
+        var from = window.pageYOffset, to0 = landingY(), dist = Math.abs(to0 - from);
+        if (dist < 3) { arrive(); return; }
+        var dur = clamp(dist / window.innerHeight * 560, 1400, 2800);
+        var stop = function () { endFlight(); };
+        var evs = ['wheel', 'touchstart', 'keydown', 'pointerdown'];
+        evs.forEach(function (n) { window.addEventListener(n, stop, { passive: true }); });
+        unbind = function () { evs.forEach(function (n) { window.removeEventListener(n, stop); }); };
+        function frame(now) {
+          if (!tFlight) tFlight = now;
+          var u = clamp((now - tFlight) / dur, 0, 1), y = landingY();       /* aim at the live target, so a late layout change cannot leave it short */
+          window.scrollTo({ top: Math.round(from + (y - from) * easeIO(u)), behavior: 'instant' });
+          if (u < 1) { flight = requestAnimationFrame(frame); return; }
+          window.scrollTo({ top: landingY(), behavior: 'instant' });
+          flight = 0; if (unbind) { unbind(); unbind = null; }
+          arrive();
+        }
+        flight = requestAnimationFrame(frame);
+      }
+      if (how) how.addEventListener('click', function (e) {
+        if (!on) return;           /* reduced motion or no pin: the link just goes to the drawing, which is a normal block */
+        e.preventDefault(); fly();
+      });
+
       sync();
       if (A.onResize) A.onResize(function () { api.remeasure(); });
       /* the image may arrive after the first measurement */
